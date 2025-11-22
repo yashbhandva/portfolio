@@ -1,0 +1,196 @@
+.payments-container {
+  min-height: 100vh;
+  background: #f8fafc;
+  padding: 2rem;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .header-content {
+    .page-title {
+      font-size: 2rem;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 0.5rem;
+    }
+
+    .page-subtitle {
+      color: #6b7280;
+      font-size: 1.125rem;
+    }
+  }
+
+  .header-stats {
+    display: flex;
+    gap: 2rem;
+
+    .stat-item {
+      text-align: center;
+
+      .stat-number {
+        display: block;
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #059669;
+
+        &.pending {
+          color: #d97706;
+        }
+      }
+
+      .stat-label {
+        font-size: 0.875rem;
+        color: #6b7280;
+        font-weight: 500;
+      }
+    }
+  }
+}
+
+.table-container {
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.payments-table {
+  width: 100%;
+  border-collapse: collapse;
+
+  th, td {
+    padding: 1rem;
+    text-align: left;
+    border-bottom: 1px solid #e5e7eb;
+  }
+
+  th {
+    background: #f8fafc;
+    font-weight: 600;
+    color: #374151;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  td {
+    color: #6b7280;
+  }
+
+  tr:hover {
+    background: #f8fafc;
+  }
+}
+
+.payment-id {
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+  color: #374151;
+}
+
+.client-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+
+  .client-avatar {
+    width: 32px;
+    height: 32px;
+    background: linear-gradient(135deg, #667eea, #764ba2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .client-name {
+    font-weight: 500;
+    color: #374151;
+  }
+}
+
+.project-cell {
+  font-weight: 500;
+  color: #374151;
+}
+
+.amount-cell {
+  font-weight: 700;
+  color: #059669;
+  font-size: 1.125rem;
+}
+
+.status-badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+
+  &.COMPLETED {
+    background: #d1fae5;
+    color: #059669;
+  }
+
+  &.PENDING {
+    background: #fef3c7;
+    color: #d97706;
+  }
+
+  &.FAILED {
+    background: #fecaca;
+    color: #dc2626;
+  }
+
+  &.REFUNDED {
+    background: #f3f4f6;
+    color: #6b7280;
+  }
+}
+
+.method-cell {
+  font-weight: 500;
+  color: #374151;
+}
+
+.date-cell {
+  font-size: 0.875rem;
+  color: #6b7280;
+}
+
+.action-buttons {
+  display: flex;
+  gap: 0.5rem;
+
+  .btn-icon {
+    width: 32px;
+    height: 32px;
+    border: 1px solid #e5e7eb;
+    background: white;
+    border-radius: 0.375rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    color: #6b7280;
+
+    &:hover {
+      background: #f3f4f6;
+      border-color: #d1d5db;
+    }
+  }
+}

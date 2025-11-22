@@ -1,0 +1,143 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  z-index: 1000;
+  transition: all 0.3s ease;
+
+  &.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.nav-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 70px;
+}
+
+.logo-link {
+  text-decoration: none;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2563eb;
+
+  .logo-image {
+    height: 160px;
+    width: auto;
+    object-fit: contain;
+  }
+}
+
+.nav-menu {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  @media (max-width: 768px) {
+    position: fixed;
+    top: 70px;
+    left: 0;
+    width: 100%;
+    background: white;
+    flex-direction: column;
+    padding: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-100%);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+
+    &.active {
+      transform: translateY(0);
+      opacity: 1;
+      visibility: visible;
+    }
+  }
+}
+
+.nav-item {
+  .nav-link {
+    text-decoration: none;
+    color: #374151;
+    font-weight: 500;
+    transition: color 0.3s ease;
+    padding: 0.5rem 1rem;
+    border-radius: 0.375rem;
+
+    &:hover {
+      color: #2563eb;
+    }
+
+    &.active {
+      color: #2563eb;
+      background: rgba(37, 99, 235, 0.1);
+    }
+
+    &.btn-primary {
+      background: #2563eb;
+      color: white;
+      padding: 0.5rem 1.5rem;
+
+      &:hover {
+        background: #1d4ed8;
+        color: white;
+      }
+    }
+
+    &.btn-secondary {
+      background: transparent;
+      border: 1px solid #d1d5db;
+      color: #374151;
+
+      &:hover {
+        background: #f3f4f6;
+      }
+    }
+  }
+}
+
+.mobile-menu-btn {
+  display: none;
+  flex-direction: column;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  gap: 4px;
+
+  span {
+    width: 25px;
+    height: 2px;
+    background: #374151;
+    transition: all 0.3s ease;
+  }
+
+  &.active {
+    span:nth-child(1) {
+      transform: rotate(45deg) translate(6px, 6px);
+    }
+    span:nth-child(2) {
+      opacity: 0;
+    }
+    span:nth-child(3) {
+      transform: rotate(-45deg) translate(6px, -6px);
+    }
+  }
+
+  @media (max-width: 768px) {
+    display: flex;
+  }
+}
