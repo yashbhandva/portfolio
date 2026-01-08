@@ -3,70 +3,100 @@ import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
 @Component({
-  selector: 'app-about',
-  standalone: true,
-  imports: [CommonModule, RouterLink],
-  template: `
-    <!-- Hero Section -->
-    <section class="about-hero">
-      <div class="container">
-        <div class="hero-content">
-          <h1 class="hero-title">About Our Team</h1>
-          <p class="hero-description">
-            We are three passionate friends who turned our coding passion into a successful business. 
-            With combined experience of over 10 years, we deliver exceptional digital solutions.
-          </p>
-        </div>
-      </div>
-    </section>
+selector: 'app-about',
+standalone: true,
+imports: [CommonModule, RouterLink],
+template: `
+<!-- Hero Section -->
+<section class="about-hero">
+<div class="container">
+<div class="hero-content">
+<h1 class="hero-title">About Me</h1>
+<p class="hero-description">
+I am a passionate Full Stack Developer who turned coding passion into a successful career.
+With over 4 years of experience, I deliver exceptional digital solutions.
+</p>
+</div>
+</div>
+</section>
 
-    <!-- Team Section -->
-    <section class="team-section">
-      <div class="container">
-        <div class="section-header">
-          <h2 class="section-title">Meet Our Team</h2>
-          <p class="section-description">
-            Three friends, one vision - creating amazing digital experiences
-          </p>
-        </div>
-        
-        <div class="team-grid">
-          <div class="team-card" *ngFor="let member of teamMembers()" 
-               [class.active]="activeMember() === member.id"
-               (mouseenter)="setActiveMember(member.id)"
-               (mouseleave)="clearActiveMember()">
-            
-            <!-- Team Member Photo -->
-            <div class="member-photo">
-              <img [src]="member.photo" [alt]="member.name">
-              <div class="photo-overlay">
-                <div class="social-links">
-                  <a [href]="member.socialLinks.facebook" target="_blank" class="social-link">
-                    <i class="fab fa-facebook-f"></i>
-                  </a>
-                  <a [href]="member.socialLinks.twitter" target="_blank" class="social-link">
-                    <i class="fab fa-twitter"></i>
-                  </a>
-                  <a [href]="member.socialLinks.linkedin" target="_blank" class="social-link">
-                    <i class="fab fa-linkedin-in"></i>
-                  </a>
-                  <a [href]="member.socialLinks.instagram" target="_blank" class="social-link">
-                    <i class="fab fa-instagram"></i>
-                  </a>
-                </div>
-              </div>
-            </div>
+<!-- Team Section - Modified to Single Member -->
+<section class="team-section">
+<div class="container">
+<div class="section-header">
+<h2 class="section-title">Founder & Chief Executive Officer</h2>
+<p class="section-description">
+One passion, one vision - creating amazing digital experiences
+</p>
+</div>
 
-            <!-- Team Member Info -->
-            <div class="member-info">
-              <h3 class="member-name">{{ member.name }}</h3>
-              <p class="member-role">{{ member.role }}</p>
-              <p class="member-bio">{{ member.bio }}</p>
-              
-              <div class="member-skills">
-                <span class="skill-tag" *ngFor="let skill of member.skills">
+<!-- Single Team Member Card (Centered) -->
+<div class="single-member-container">
+<div class="single-member-card">
+
+<!-- Team Member Photo (Larger & Centered) -->
+<div class="member-photo-large">
+<img [src]="teamMember().photo" [alt]="teamMember().name">
+<div class="photo-overlay">
+<div class="social-links">
+<a [href]="teamMember().socialLinks.facebook" target="_blank" class="social-link">
+<i class="fab fa-facebook-f"></i>
+</a>
+<a [href]="teamMember().socialLinks.twitter" target="_blank" class="social-link">
+<i class="fab fa-twitter"></i>
+</a>
+<a [href]="teamMember().socialLinks.linkedin" target="_blank" class="social-link">
+<i class="fab fa-linkedin-in"></i>
+</a>
+<a [href]="teamMember().socialLinks.instagram" target="_blank" class="social-link">
+<i class="fab fa-instagram"></i>
+</a>
+</div>
+</div>
+</div>
+
+<!-- Team Member Info -->
+<div class="member-info-single">
+<h3 class="member-name-large">{{ teamMember().name }}</h3>
+              <p class="member-role-single">{{ teamMember().role }}</p>
+              <p class="member-bio-single">{{ teamMember().bio }}</p>
+
+              <div class="member-skills-single">
+                <span class="skill-tag" *ngFor="let skill of teamMember().skills">
                   {{ skill }}
                 </span>
+              </div>
+
+              <!-- Additional Info Section -->
+              <div class="additional-info">
+                <div class="info-item">
+                  <i class="fas fa-briefcase"></i>
+                  <div>
+                    <strong>Experience</strong>
+                    <p>4+ Years</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <i class="fas fa-graduation-cap"></i>
+                  <div>
+                    <strong>Education</strong>
+                    <p>B.Tech Computer Science</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <div>
+                    <strong>Location</strong>
+                    <p>City, Country</p>
+                  </div>
+                </div>
+                <div class="info-item">
+                  <i class="fas fa-language"></i>
+                  <div>
+                    <strong>Languages</strong>
+                    <p>English, Hindi</p>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -90,9 +120,9 @@ import { RouterLink } from '@angular/router';
     <section class="services-overview">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">Our Services & Ratings</h2>
+          <h2 class="section-title">My Services & Expertise</h2>
           <p class="section-description">
-            We excel in delivering top-notch digital solutions with excellent client satisfaction
+            I excel in delivering top-notch digital solutions with excellent client satisfaction
           </p>
         </div>
 
@@ -133,9 +163,9 @@ import { RouterLink } from '@angular/router';
     <section class="reviews-section">
       <div class="container">
         <div class="section-header">
-          <h2 class="section-title">What Our Clients Say</h2>
+          <h2 class="section-title">What My Clients Say</h2>
           <p class="section-description">
-            Don't just take our word for it - hear from our satisfied clients
+            Don't just take my word for it - hear from my satisfied clients
           </p>
         </div>
 
@@ -166,11 +196,11 @@ import { RouterLink } from '@angular/router';
       <div class="container">
         <div class="location-content">
           <div class="location-info">
-            <h2 class="section-title">Visit Our Office</h2>
+            <h2 class="section-title">Contact Me</h2>
             <p class="location-description">
-              Come meet us at our office. We'd love to discuss your project over a cup of coffee!
+              Let's discuss your project. I'd love to help bring your ideas to life!
             </p>
-            
+
             <div class="contact-details">
               <div class="contact-item">
                 <i class="fas fa-map-marker-alt"></i>
@@ -179,7 +209,7 @@ import { RouterLink } from '@angular/router';
                   <p>123 Tech Street, Innovation District<br>City, State 12345</p>
                 </div>
               </div>
-              
+
               <div class="contact-item">
                 <i class="fas fa-phone"></i>
                 <div>
@@ -187,15 +217,15 @@ import { RouterLink } from '@angular/router';
                   <p>+1 (555) 123-4567</p>
                 </div>
               </div>
-              
+
               <div class="contact-item">
                 <i class="fas fa-envelope"></i>
                 <div>
                   <strong>Email</strong>
-                  <p>hello&#64;ourportfolio.com</p>
+                  <p>hello&#64;myportfolio.com</p>
                 </div>
               </div>
-              
+
               <div class="contact-item">
                 <i class="fas fa-clock"></i>
                 <div>
@@ -207,13 +237,13 @@ import { RouterLink } from '@angular/router';
           </div>
 
           <div class="map-container">
-            <iframe 
+            <iframe
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3679.6339866!2d70.9035796!3d23.6339866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x395a5f472df66221%3A0x601ed0a582e55960!2sModa%20Gujarat%20Kutch!5e0!3m2!1sen!2sin!4v1699999999999!5m2!1sen!2sin"
-              width="100%" 
-              height="400" 
-              style="border:0;" 
-              allowfullscreen="" 
-              loading="lazy" 
+              width="100%"
+              height="400"
+              style="border:0;"
+              allowfullscreen=""
+              loading="lazy"
               referrerpolicy="no-referrer-when-downgrade">
             </iframe>
           </div>
@@ -225,7 +255,7 @@ import { RouterLink } from '@angular/router';
     <section class="about-cta">
       <div class="container">
         <div class="cta-content">
-          <h2 class="cta-title">Ready to Work With Us?</h2>
+          <h2 class="cta-title">Ready to Work With Me?</h2>
           <p class="cta-description">
             Let's discuss your project and bring your ideas to life
           </p>
@@ -239,8 +269,7 @@ import { RouterLink } from '@angular/router';
   styleUrls: ['./about.component.scss']
 })
 export class AboutComponent implements OnInit, AfterViewInit {
-  teamMembers = signal<any[]>([]);
-  activeMember = signal<number | null>(null);
+  teamMember = signal<any>({});  // Changed to single member
   companyStats = signal<any[]>([]);
   servicesWithRatings = signal<any[]>([]);
   clientReviews = signal<any[]>([]);
@@ -256,58 +285,30 @@ export class AboutComponent implements OnInit, AfterViewInit {
   }
 
   private loadTeamData(): void {
-    // Team members data - 3 dosto ke liye
-    this.teamMembers.set([
-      {
-        id: 1,
-        name: 'yash bhandva',
-        role: 'Full Stack Developer',
-        photo: '/assets/images/projects/anime2.jpg',
-        bio: 'Specialized in Angular and Spring Boot with 4+ years of experience. Loves solving complex problems and building scalable applications.',
-        skills: ['Angular', 'Spring Boot', 'Node.js', 'MySQL', 'AWS'],
-        socialLinks: {
-          facebook: 'https://facebook.com/raj',
-          twitter: 'https://twitter.com/raj',
-          linkedin: 'https://linkedin.com/in/raj',
-          instagram: 'https://www.instagram.com/_y_a_s_h004/?hl=en'
-        }
-      },
-      {
-        id: 2,
-        name: 'bhautik chopra',
-        role: 'UI/UX Designer & Frontend Developer',
-        photo: '/assets/images/projects/bhautik.jpg.jpg',
-        bio: 'Creative designer with 3+ years of experience in creating beautiful and functional user interfaces. Passionate about animations and user experience.',
-        skills: ['Figma', 'Adobe XD', 'React', 'GSAP', 'Three.js'],
-        socialLinks: {
-          facebook: 'https://facebook.com/amit',
-          twitter: 'https://twitter.com/amit',
-          linkedin: 'https://linkedin.com/in/amit',
-          instagram: 'https://www.instagram.com/bhautik_chopda_9/?hl=enhttps://instagram.com/amit'
-        }
-      },
-      {
-        id: 3,
-        name: 'jay',
-        role: 'Mobile App Developer & DevOps',
-        photo: '/assets/images/projects/jay.jpg.jpg',
-        bio: 'Expert in mobile app development and cloud infrastructure. Enjoys building cross-platform apps and optimizing deployment pipelines.',
-        skills: ['Flutter', 'React Native', 'Docker', 'Kubernetes', 'Firebase'],
-        socialLinks: {
-          facebook: 'https://facebook.com/vikram',
-          twitter: 'https://twitter.com/vikram',
-          linkedin: 'https://linkedin.com/in/vikram',
-          instagram: 'https://www.instagram.com/jay._.47._.10/?hl=en'
-        }
+    // Single team member data - Sirf Yash Bhandva
+    this.teamMember.set({
+      name: 'Yash Bhandva',
+      role: 'Full Stack Developer',
+      photo: '/assets/images/projects/anime2.jpg',
+      bio: `I lead this company with a simple belief — that great ideas can change the world when combined with discipline, innovation, and purpose. From the very beginning, my focus has been on building a brand that stands for trust, excellence, and customer-first thinking.
+            What started as a dream is now evolving into a mission: to create solutions that empower individuals and businesses to achieve more. I see challenges not as obstacles, but as opportunities to grow stronger and think smarter.
+            My role as a CEO is not just to guide the company, but to inspire the people behind it. Together, we are building more than just a business — we are shaping a vision that will define the future.`,
+      skills: ['java', 'Spring Boot', 'spring security', 'jpa', 'html', 'css', 'mysql', 'postgres', 'Docker', 'Git'],
+      socialLinks: {
+        facebook: 'https://facebook.com/yash',
+        twitter: 'https://twitter.com/yash',
+        linkedin: 'https://linkedin.com/in/yash',
+        instagram: 'https://www.instagram.com/_y_a_s_h004/?hl=en'
       }
-    ]);
+    });
 
+    // Updated stats for individual
     this.companyStats.set([
       { value: 50, label: 'Projects Completed' },
       { value: 25, label: 'Happy Clients' },
-      { value: 3, label: 'Team Members' },
-      { value: 5, label: 'Years Experience' },
+      { value: 4, label: 'Years Experience' },
       { value: 98, label: 'Client Satisfaction' },
+      { value: 15, label: 'Technologies' },
       { value: 24, label: 'Awards Won' }
     ]);
   }
@@ -318,33 +319,33 @@ export class AboutComponent implements OnInit, AfterViewInit {
         name: 'Web Development',
         icon: 'fas fa-code',
         rating: 4.8,
-        description: 'Custom web applications built with modern frameworks and best practices.',
+        description: 'Custom web applications built with modern frameworks like Angular and React.',
         projectsCompleted: 25,
         successRate: 95
       },
       {
-        name: 'Mobile App Development',
-        icon: 'fas fa-mobile-alt',
+        name: 'Backend Development',
+        icon: 'fas fa-server',
         rating: 4.7,
-        description: 'Cross-platform mobile applications for iOS and Android devices.',
-        projectsCompleted: 15,
-        successRate: 92
+        description: 'Robust server-side solutions using Spring Boot and Node.js.',
+        projectsCompleted: 20,
+        successRate: 93
       },
       {
-        name: 'UI/UX Design',
-        icon: 'fas fa-palette',
+        name: 'Database Design',
+        icon: 'fas fa-database',
+        rating: 4.6,
+        description: 'Efficient database architecture and optimization for performance.',
+        projectsCompleted: 15,
+        successRate: 96
+      },
+      {
+        name: 'API Development',
+        icon: 'fas fa-cogs',
         rating: 4.9,
-        description: 'Beautiful and intuitive user interfaces that enhance user experience.',
+        description: 'RESTful and GraphQL APIs with comprehensive documentation.',
         projectsCompleted: 30,
         successRate: 98
-      },
-      {
-        name: 'Digital Marketing',
-        icon: 'fas fa-chart-line',
-        rating: 4.6,
-        description: 'Comprehensive digital marketing strategies to grow your business online.',
-        projectsCompleted: 20,
-        successRate: 90
       }
     ]);
   }
@@ -352,7 +353,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
   private loadReviewsData(): void {
     this.clientReviews.set([
       {
-        comment: 'The team delivered an outstanding e-commerce platform that exceeded our expectations. Their attention to detail and professionalism was remarkable.',
+        comment: 'Yash delivered an outstanding e-commerce platform that exceeded our expectations. His attention to detail and professionalism was remarkable.',
         rating: 5,
         author: {
           name: 'Priya Mehta',
@@ -362,7 +363,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
         }
       },
       {
-        comment: 'Working with these guys was a game-changer for our business. They understood our vision and delivered a mobile app that our users love.',
+        comment: 'Working with Yash was a game-changer for our business. He understood our vision and delivered a web app that our users love.',
         rating: 5,
         author: {
           name: 'Rohan Verma',
@@ -372,7 +373,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
         }
       },
       {
-        comment: 'Excellent service and support throughout the project. They were always available to answer questions and implement changes quickly.',
+        comment: 'Excellent service and support throughout the project. Yash was always available to answer questions and implement changes quickly.',
         rating: 4,
         author: {
           name: 'Anita Desai',
@@ -384,16 +385,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
     ]);
   }
 
-  setActiveMember(memberId: number): void {
-    this.activeMember.set(memberId);
-  }
-
-  clearActiveMember(): void {
-    this.activeMember.set(null);
-  }
-
   private initAnimations(): void {
-    // GSAP animations will be implemented here
-    // For now, we'll add basic CSS animations
+    // Animation code remains the same
   }
 }
