@@ -32,6 +32,7 @@ export const routes: Routes = [
   },
   {
     path: 'client',
+    loadComponent: () => import('./layouts/client-layout/client-layout.component').then(m => m.ClientLayoutComponent),
     loadChildren: () => import('./pages/client/client.routes').then(m => m.CLIENT_ROUTES),
     canActivate: [AuthGuard],
     data: { roles: ['CLIENT', 'ADMIN'] }
