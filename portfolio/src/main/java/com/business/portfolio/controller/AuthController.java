@@ -19,24 +19,14 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<ApiResponse<AuthDto.AuthResponse>> register(
             @Valid @RequestBody AuthDto.RegisterRequest request) {
-        try {
-            AuthDto.AuthResponse response = authService.register(request);
-            return ResponseEntity.ok(ApiResponse.success("User registered successfully", response));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        AuthDto.AuthResponse response = authService.register(request);
+        return ResponseEntity.ok(ApiResponse.success("User registered successfully", response));
     }
 
     @PostMapping("/login")
     public ResponseEntity<ApiResponse<AuthDto.AuthResponse>> login(
             @Valid @RequestBody AuthDto.LoginRequest request) {
-        try {
-            AuthDto.AuthResponse response = authService.login(request);
-            return ResponseEntity.ok(ApiResponse.success("Login successful", response));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        AuthDto.AuthResponse response = authService.login(request);
+        return ResponseEntity.ok(ApiResponse.success("Login successful", response));
     }
 }
