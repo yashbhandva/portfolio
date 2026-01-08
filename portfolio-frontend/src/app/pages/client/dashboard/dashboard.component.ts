@@ -90,8 +90,8 @@ import { ClientService } from '../../../services/client.service';
           <div class="activity-item" *ngFor="let project of recentProjects()">
             <i class="fas fa-project-diagram"></i>
             <div class="activity-content">
-              <p>{{ project.title }}</p>
-              <span class="activity-time">{{ project.category }} • {{ project.technologies?.join(', ') }}</span>
+              <p>{{ project.projectTitle }}</p>
+              <span class="activity-time">{{ project.status }} • {{ project.createdAt | date:'mediumDate' }}</span>
             </div>
           </div>
           <div class="activity-item" *ngIf="recentProjects().length === 0">
@@ -152,17 +152,20 @@ export class ClientDashboardComponent implements OnInit {
 
   private loadDashboardData() {
     this.loading.set(true);
-    
-    // Load projects count
-    this.projectService.getAllProjects().subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          this.projectsCount.set(response.data.length);
-          this.recentProjects.set(response.data.slice(0, 3));
-        }
-      },
-      error: (error) => console.error('Error loading projects:', error)
-    });
+    const user = this.currentUser();
+
+    if (user && user.id) {
+      // Load client's project requests
+      this.clientService.getMyProjectRequests(user.id).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.projectsCount.set(response.data.length);
+            this.recentProjects.set(response.data.slice(0, 3));
+          }
+        },
+        error: (error) => console.error('Error loading projects:', error)
+      });
+    }
 
     // Load services count
     this.adminService.getAllServices().subscribe({
@@ -176,11 +179,9 @@ export class ClientDashboardComponent implements OnInit {
 
     // Load user's messages count
     const userEmail = this.currentUser()?.email;
-    console.log('User email:', userEmail);
     if (userEmail) {
       this.clientService.getMyMessagesCount(userEmail).subscribe({
         next: (response) => {
-          console.log('Messages response:', response);
           if (response.status === 'success') {
             this.messagesCount.set(response.data);
           }
