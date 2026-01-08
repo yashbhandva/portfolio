@@ -35,8 +35,8 @@ public class DataInitializer implements CommandLineRunner {
     private void initializeData() {
         // Create admin user
         User admin = new User();
-        admin.setName("Admin User");
-        admin.setEmail("admin@portfolio.com");
+        admin.setName("Yash Bhandva");
+        admin.setEmail("admin@gmail.com");
         admin.setPassword(passwordEncoder.encode("admin123"));
         admin.setRole(User.Role.ADMIN);
         admin.setPhoneNumber("+1234567890");
@@ -46,32 +46,11 @@ public class DataInitializer implements CommandLineRunner {
         // Create sample client
         User client = new User();
         client.setName("John Doe");
-        client.setEmail("john@example.com");
-        client.setPassword(passwordEncoder.encode("client123"));
+        client.setEmail("user@gmail.com");
+        client.setPassword(passwordEncoder.encode("user123"));
         client.setRole(User.Role.CLIENT);
         client.setPhoneNumber("+1987654321");
         userRepository.save(client);
-
-        // Create sample projects
-        Project project1 = new Project();
-        project1.setTitle("E-commerce Website");
-        project1.setDescription("Modern e-commerce platform with React and Spring Boot");
-        project1.setCategory("Web Development");
-        project1.setImageUrl("https://picsum.photos/400/300?random=1");
-        project1.setProjectUrl("https://github.com/example/ecommerce");
-        project1.setTechnologies("React, Spring Boot, MySQL");
-        project1.setFeatured(true);
-        projectRepository.save(project1);
-
-        Project project2 = new Project();
-        project2.setTitle("Mobile Task App");
-        project2.setDescription("Task management mobile application");
-        project2.setCategory("Mobile Development");
-        project2.setImageUrl("https://picsum.photos/400/300?random=2");
-        project2.setProjectUrl("https://github.com/example/taskapp");
-        project2.setTechnologies("Flutter, Firebase");
-        project2.setFeatured(false);
-        projectRepository.save(project2);
 
         // Create sample services
         Service service1 = new Service();
