@@ -83,6 +83,7 @@
   width: calc(100vw - 250px);
   padding: 0;
   overflow-x: auto;
+  padding-bottom: 2rem; /* Add padding to prevent footer cut-off */
 }
 
 @media (max-width: 768px) {
@@ -104,6 +105,7 @@
 
   .main-content {
     margin-left: 0;
+    padding-top: 60px; /* Add padding for mobile header if needed */
   }
 
   .client-layout {
