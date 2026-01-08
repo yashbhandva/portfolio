@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { RouterOutlet, RouterLink, RouterLinkActive, Router } from '@angular/router';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-admin-layout',
@@ -33,6 +34,14 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
             <i class="fas fa-users"></i>
             Users
           </a>
+          <a routerLink="/" class="nav-item">
+            <i class="fas fa-home"></i>
+            Back to Home
+          </a>
+          <button (click)="logout()" class="nav-item logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
         </nav>
       </aside>
       <main class="main-content">
@@ -42,4 +51,12 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
   `,
   styleUrls: ['./admin-layout.component.scss']
 })
-export class AdminLayoutComponent {}
+export class AdminLayoutComponent {
+  private authService = inject(AuthService);
+  private router = inject(Router);
+
+  logout() {
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
+}
