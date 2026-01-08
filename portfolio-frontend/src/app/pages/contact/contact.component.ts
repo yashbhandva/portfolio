@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ContactService } from '../../services/contact.service';
+import { ClientService } from '../../services/client.service';
+import { AuthService } from '../../services/auth.service';
 import { ContactRequest } from '../../models/contact.model';
 
 @Component({
@@ -428,6 +430,8 @@ import { ContactRequest } from '../../models/contact.model';
 })
 export class ContactComponent implements OnInit, AfterViewInit {
   contactService = inject(ContactService);
+  clientService = inject(ClientService);
+  authService = inject(AuthService);
   router = inject(Router);
   route = inject(ActivatedRoute);
 
@@ -448,10 +452,30 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   ngOnInit() {
     this.checkPreSelectedService();
+    this.prefillUserData();
   }
 
   ngAfterViewInit() {
     this.initFormAnimations();
+  }
+
+  private prefillUserData(): void {
+    const user = this.authService.currentUser();
+    if (user) {
+      this.formData.email = user.email;
+
+      // Handle name (firstName + lastName)
+      if (user.firstName) {
+        this.firstName = user.firstName;
+        this.lastName = user.lastName || '';
+        this.updateFullName();
+      }
+
+      // Handle phone
+      if (user.phone) {
+        this.formData.phone = user.phone;
+      }
+    }
   }
 
   private checkPreSelectedService(): void {
@@ -489,24 +513,54 @@ export class ContactComponent implements OnInit, AfterViewInit {
 
   // Form submission
   onSubmit(): void {
-    const contactData: ContactRequest = {
-      name: this.formData.name,
-      email: this.formData.email,
-      phone: this.formData.phone || undefined,
-      subject: this.formData.subject,
-      message: this.formData.message
-    };
+    const user = this.authService.currentUser();
 
-    this.contactService.createContact(contactData).subscribe({
-      next: (response) => {
-        if (response.status === 'success') {
-          console.log('Message sent successfully:', response.data);
+    // If user is logged in, treat as a project request
+    if (user && user.id) {
+      const projectRequest = {
+        projectTitle: this.formData.subject,
+        projectDescription: this.formData.message,
+        serviceId: 1, // Default service ID or map from subject
+        budget: 0,
+        timelineDays: 30,
+        priority: 'MEDIUM'
+      };
+
+      this.clientService.createProjectRequest(user.id, projectRequest).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.contactService.submissionSuccess.set(true);
+            // Optionally redirect to client dashboard
+            setTimeout(() => {
+              this.router.navigate(['/client']);
+            }, 2000);
+          }
+        },
+        error: (error) => {
+          this.contactService.submissionError.set(error.error?.message || 'Failed to submit request');
         }
-      },
-      error: (error) => {
-        console.error('Error sending message:', error);
-      }
-    });
+      });
+    } else {
+      // Standard contact form submission for guests
+      const contactData: ContactRequest = {
+        name: this.formData.name,
+        email: this.formData.email,
+        phone: this.formData.phone || undefined,
+        subject: this.formData.subject,
+        message: this.formData.message
+      };
+
+      this.contactService.createContact(contactData).subscribe({
+        next: (response) => {
+          if (response.status === 'success') {
+            this.contactService.submissionSuccess.set(true);
+          }
+        },
+        error: (error) => {
+          this.contactService.submissionError.set(error.error?.message || 'Failed to send message');
+        }
+      });
+    }
   }
 
   // FAQ methods
