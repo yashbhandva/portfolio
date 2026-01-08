@@ -29,6 +29,9 @@
 
 .sidebar-nav {
   padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  height: calc(100% - 80px);
 }
 
 .nav-item {
@@ -38,7 +41,13 @@
   color: #bdc3c7;
   text-decoration: none;
   transition: all 0.3s ease;
-  
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  font-size: 1rem;
+
   i {
     width: 20px;
     margin-right: 0.75rem;
@@ -52,6 +61,17 @@
   
   &.active {
     background: #3498db;
+    color: white;
+  }
+}
+
+.logout-btn {
+  margin-top: auto;
+  border-top: 1px solid #34495e;
+  color: #e74c3c;
+
+  &:hover {
+    background: #c0392b;
     color: white;
   }
 }
