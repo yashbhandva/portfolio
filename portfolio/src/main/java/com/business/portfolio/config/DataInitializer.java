@@ -7,15 +7,11 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDateTime;
-import java.util.Arrays;
-
 @Component
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
     private final UserRepository userRepository;
-    private final ProjectRepository projectRepository;
     private final ServiceRepository serviceRepository;
     private final ContactRepository contactRepository;
     private final PasswordEncoder passwordEncoder;
