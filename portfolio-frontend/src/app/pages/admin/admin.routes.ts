@@ -13,6 +13,11 @@ export const ADMIN_ROUTES: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'requests', // New route for Project Requests
+    loadComponent: () => import('./project-requests/project-requests.component').then(m => m.AdminProjectRequestsComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'services',
     loadComponent: () => import('./services/services.component').then(m => m.AdminServicesComponent),
     canActivate: [AuthGuard]
