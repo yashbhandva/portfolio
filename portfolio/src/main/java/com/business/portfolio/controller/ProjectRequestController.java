@@ -1,6 +1,7 @@
 package com.business.portfolio.controller;
 
 import com.business.portfolio.dto.ApiResponse;
+import com.business.portfolio.dto.ProjectDto;
 import com.business.portfolio.dto.ProjectRequestDto;
 import com.business.portfolio.model.ProjectRequest;
 import com.business.portfolio.service.ProjectRequestService;
@@ -21,100 +22,73 @@ public class ProjectRequestController {
     // 👤 CLIENT ENDPOINTS
     @PostMapping("/client/project-requests")
     public ResponseEntity<ApiResponse<ProjectRequestDto.ProjectRequestResponse>> createProjectRequest(
-            @RequestAttribute("userId") Long clientId, // <-- FIXED: Use RequestAttribute
+            @RequestAttribute("userId") Long clientId,
             @Valid @RequestBody ProjectRequestDto.CreateProjectRequest request) {
-        try {
-            ProjectRequestDto.ProjectRequestResponse projectRequest = projectRequestService.createProjectRequest(clientId, request);
-            return ResponseEntity.ok(ApiResponse.success("Project request submitted successfully", projectRequest));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        
+        ProjectRequestDto.ProjectRequestResponse projectRequest = projectRequestService.createProjectRequest(clientId, request);
+        return ResponseEntity.ok(ApiResponse.success("Project request submitted successfully", projectRequest));
     }
 
     @GetMapping("/client/project-requests")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> getClientRequests(
-            @RequestAttribute("userId") Long clientId) { // <-- FIXED: Use RequestAttribute
-        try {
-            List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getClientRequests(clientId);
-            return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+            @RequestAttribute("userId") Long clientId) {
+            
+        List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getClientRequests(clientId);
+        return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
     }
 
     // 🛠️ ADMIN ENDPOINTS
     @GetMapping("/admin/project-requests")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> getAllRequests() {
-        try {
-            List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getAllRequests();
-            return ResponseEntity.ok(ApiResponse.success("All project requests retrieved successfully", requests));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getAllRequests();
+        return ResponseEntity.ok(ApiResponse.success("All project requests retrieved successfully", requests));
+    }
+
+    @PostMapping("/admin/project-requests/{id}/approve")
+    public ResponseEntity<ApiResponse<ProjectDto.ProjectResponse>> approveAndCreateProject(@PathVariable Long id) {
+        ProjectDto.ProjectResponse project = projectRequestService.approveAndCreateProject(id);
+        return ResponseEntity.ok(ApiResponse.success("Project approved and created successfully", project));
     }
 
     @PutMapping("/admin/project-requests/{id}/status")
     public ResponseEntity<ApiResponse<ProjectRequestDto.ProjectRequestResponse>> updateRequestStatus(
             @PathVariable Long id,
             @Valid @RequestBody ProjectRequestDto.UpdateProjectRequestStatus request) {
-        try {
-            ProjectRequestDto.ProjectRequestResponse updatedRequest = projectRequestService.updateRequestStatus(id, request);
-            return ResponseEntity.ok(ApiResponse.success("Project request status updated successfully", updatedRequest));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        
+        ProjectRequestDto.ProjectRequestResponse updatedRequest = projectRequestService.updateRequestStatus(id, request);
+        return ResponseEntity.ok(ApiResponse.success("Project request status updated successfully", updatedRequest));
     }
 
-    // 🔍 SEARCH ENDPOINTS
+    // ... (rest of the methods)
     @GetMapping("/admin/project-requests/search/title")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> searchRequestsByTitle(
             @RequestParam String title) {
-        try {
-            List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.searchRequestsByTitle(title);
-            return ResponseEntity.ok(ApiResponse.success("Project requests found", requests));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        
+        List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.searchRequestsByTitle(title);
+        return ResponseEntity.ok(ApiResponse.success("Project requests found", requests));
     }
 
     @GetMapping("/admin/project-requests/search/client")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> searchRequestsByClientName(
             @RequestParam String clientName) {
-        try {
-            List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.searchRequestsByClientName(clientName);
-            return ResponseEntity.ok(ApiResponse.success("Project requests found", requests));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        
+        List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.searchRequestsByClientName(clientName);
+        return ResponseEntity.ok(ApiResponse.success("Project requests found", requests));
     }
 
     @GetMapping("/admin/project-requests/status/{status}")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> getRequestsByStatus(
             @PathVariable ProjectRequest.ProjectStatus status) {
-        try {
-            List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getRequestsByStatus(status);
-            return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        
+        List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getRequestsByStatus(status);
+        return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
     }
 
     @GetMapping("/admin/project-requests/priority/{priority}")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> getRequestsByPriority(
             @PathVariable ProjectRequest.Priority priority) {
-        try {
-            List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getRequestsByPriority(priority);
-            return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
-        } catch (Exception e) {
-            return ResponseEntity.badRequest()
-                    .body(ApiResponse.error(e.getMessage()));
-        }
+        
+        List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getRequestsByPriority(priority);
+        return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
     }
 }
