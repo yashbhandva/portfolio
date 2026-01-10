@@ -1,12 +1,13 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
   selector: 'app-admin-users',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
     <div class="users-container">
       <div class="page-header">
@@ -30,7 +31,7 @@ import { AdminService } from '../../../services/admin.service';
             </tr>
           </thead>
           <tbody>
-            @for (user of users(); track user.id) {
+            @for (user of paginatedUsers(); track user.id) {
               <tr>
                 <td>
                   <div class="user-cell">
@@ -74,6 +75,15 @@ import { AdminService } from '../../../services/admin.service';
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Controls -->
+      <app-pagination-controls
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize()"
+        [totalItems]="users().length"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)">
+      </app-pagination-controls>
 
       <!-- View User Modal -->
       @if (showViewModal()) {
@@ -191,6 +201,16 @@ export class UsersComponent implements OnInit {
   showEditModal = signal(false);
   saving = signal(false);
 
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+
+  paginatedUsers = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    return this.users().slice(startIndex, endIndex);
+  });
+
   editUserData = {
     name: '',
     email: '',
@@ -215,6 +235,15 @@ export class UsersComponent implements OnInit {
         this.users.set([]);
       }
     });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+    this.currentPage.set(1);
   }
 
   viewUser(userId: number): void {
