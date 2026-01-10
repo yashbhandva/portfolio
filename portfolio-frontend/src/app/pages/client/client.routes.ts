@@ -13,6 +13,11 @@ export const CLIENT_ROUTES: Routes = [
     canActivate: [AuthGuard]
   },
   {
+    path: 'messages', // New route
+    loadComponent: () => import('./messages/messages.component').then(m => m.ClientMessagesComponent),
+    canActivate: [AuthGuard]
+  },
+  {
     path: 'payments',
     loadComponent: () => import('./payments/payments.component').then(m => m.ClientPaymentsComponent),
     canActivate: [AuthGuard]
