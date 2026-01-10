@@ -22,6 +22,15 @@ export class AdminService {
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/admin/projects`);
   }
 
+  // Project Requests
+  getAllProjectRequests(): Observable<ApiResponse<any[]>> {
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/admin/project-requests`);
+  }
+
+  updateProjectRequestStatus(id: number, status: string): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/admin/project-requests/${id}/status`, { status });
+  }
+
   // Services
   getAllServices(): Observable<ApiResponse<any[]>> {
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/admin/services`);
