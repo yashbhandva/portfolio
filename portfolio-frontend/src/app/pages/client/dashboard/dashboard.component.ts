@@ -41,11 +41,11 @@ import { ClientService } from '../../../services/client.service';
 
         <div class="stat-card">
           <div class="stat-icon">
-            <i class="fas fa-envelope"></i>
+            <i class="fas fa-clock"></i>
           </div>
           <div class="stat-content">
-            <h3>{{ messagesCount() }}</h3>
-            <p>Messages</p>
+            <h3>{{ pendingCount() }}</h3>
+            <p>Pending Requests</p>
           </div>
         </div>
 
@@ -122,32 +122,13 @@ export class ClientDashboardComponent implements OnInit {
   currentUser = signal<any>(null);
   projectsCount = signal(0);
   servicesCount = signal(0);
-  messagesCount = signal(0);
+  pendingCount = signal(0);
   recentProjects = signal<any[]>([]);
   loading = signal(false);
 
   ngOnInit() {
     this.currentUser.set(this.authService.currentUser());
     this.loadDashboardData();
-    
-    // Refresh data every 30 seconds
-    setInterval(() => {
-      this.refreshMessagesCount();
-    }, 30000);
-  }
-
-  refreshMessagesCount() {
-    const userEmail = this.currentUser()?.email;
-    if (userEmail) {
-      this.clientService.getMyMessagesCount(userEmail).subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            this.messagesCount.set(response.data);
-          }
-        },
-        error: (error) => console.error('Error refreshing messages:', error)
-      });
-    }
   }
 
   private loadDashboardData() {
@@ -156,15 +137,26 @@ export class ClientDashboardComponent implements OnInit {
 
     if (user && user.id) {
       // Load client's project requests
-      this.clientService.getMyProjectRequests(user.id).subscribe({
+      this.clientService.getMyProjectRequests().subscribe({
         next: (response) => {
           if (response.status === 'success') {
-            this.projectsCount.set(response.data.length);
-            this.recentProjects.set(response.data.slice(0, 3));
+            const projects = response.data;
+            this.projectsCount.set(projects.length);
+            this.recentProjects.set(projects.slice(0, 3));
+
+            // Calculate pending requests
+            const pending = projects.filter((p: any) => p.status === 'PENDING').length;
+            this.pendingCount.set(pending);
           }
+          this.loading.set(false);
         },
-        error: (error) => console.error('Error loading projects:', error)
+        error: (error) => {
+          console.error('Error loading projects:', error);
+          this.loading.set(false);
+        }
       });
+    } else {
+      this.loading.set(false);
     }
 
     // Load services count
@@ -176,26 +168,5 @@ export class ClientDashboardComponent implements OnInit {
       },
       error: (error) => console.error('Error loading services:', error)
     });
-
-    // Load user's messages count
-    const userEmail = this.currentUser()?.email;
-    if (userEmail) {
-      this.clientService.getMyMessagesCount(userEmail).subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            this.messagesCount.set(response.data);
-          }
-          this.loading.set(false);
-        },
-        error: (error) => {
-          console.error('Error loading messages:', error);
-          this.messagesCount.set(0);
-          this.loading.set(false);
-        }
-      });
-    } else {
-      this.messagesCount.set(0);
-      this.loading.set(false);
-    }
   }
 }
