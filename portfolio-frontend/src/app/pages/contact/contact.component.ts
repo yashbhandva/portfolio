@@ -183,6 +183,7 @@ import { ContactRequest } from '../../models/contact.model';
                       [class.error]="subject.invalid && subject.touched"
                       class="form-select">
                       <option value="">Select a subject</option>
+                      <option value="Project Inquiry">Project Inquiry</option>
                       <option value="General Inquiry">General Inquiry</option>
                       <option value="Web Development">Web Development</option>
                       <option value="Mobile App Development">Mobile App Development</option>
@@ -539,9 +540,14 @@ export class ContactComponent implements OnInit, AfterViewInit {
   // Form submission
   onSubmit(): void {
     const user = this.authService.currentUser();
+    const isProjectInquiry = this.formData.subject === 'Project Inquiry' ||
+                             this.formData.subject === 'Web Development' ||
+                             this.formData.subject === 'Mobile App Development' ||
+                             this.formData.subject === 'UI/UX Design' ||
+                             this.selectedServiceId !== null;
 
-    // If user is logged in, treat as a project request
-    if (user && user.id) {
+    // If user is logged in AND it's a project inquiry, treat as a project request
+    if (user && user.id && isProjectInquiry) {
       const projectRequest = {
         projectTitle: this.formData.subject,
         projectDescription: this.formData.message,
@@ -566,7 +572,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
         }
       });
     } else {
-      // Standard contact form submission for guests
+      // Standard contact form submission for guests OR general inquiries
       const contactData: ContactRequest = {
         name: this.formData.name,
         email: this.formData.email,
