@@ -449,6 +449,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   
   firstName = '';
   lastName = '';
+  selectedServiceId: number | null = null;
 
   ngOnInit() {
     this.checkPreSelectedService();
@@ -483,6 +484,9 @@ export class ContactComponent implements OnInit, AfterViewInit {
     this.route.queryParams.subscribe(params => {
       if (params['service']) {
         this.formData.subject = params['service'];
+      }
+      if (params['serviceId']) {
+        this.selectedServiceId = +params['serviceId'];
       }
       if (params['project']) {
         this.formData.subject = 'Project Inquiry';
@@ -520,13 +524,13 @@ export class ContactComponent implements OnInit, AfterViewInit {
       const projectRequest = {
         projectTitle: this.formData.subject,
         projectDescription: this.formData.message,
-        serviceId: 1, // Default service ID or map from subject
+        serviceId: this.selectedServiceId || 1, // Use selected service ID or default to 1
         budget: 0,
         timelineDays: 30,
         priority: 'MEDIUM'
       };
 
-      this.clientService.createProjectRequest(user.id, projectRequest).subscribe({
+      this.clientService.createProjectRequest(projectRequest).subscribe({
         next: (response) => {
           if (response.status === 'success') {
             this.contactService.submissionSuccess.set(true);
@@ -580,5 +584,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
       subject: '',
       message: ''
     };
+    this.selectedServiceId = null;
   }
 }
