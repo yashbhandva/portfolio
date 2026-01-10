@@ -1,6 +1,8 @@
 package com.business.portfolio.security;
 
 import com.business.portfolio.service.JwtService;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,10 +28,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     FilterChain filterChain) throws ServletException, IOException {
 
         final String authHeader = request.getHeader("Authorization");
+        System.out.println("DEBUG FILTER: Request to " + request.getRequestURI());
+
         final String jwt;
         final String userEmail;
 
         if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            System.out.println("DEBUG FILTER: No valid Bearer token found");
             filterChain.doFilter(request, response);
             return;
         }
@@ -37,16 +42,25 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
 
         try {
-            userEmail = jwtService.extractUsername(jwt);
-            Long userId = jwtService.extractUserId(jwt);
-            String userRole = jwtService.extractUserRole(jwt);
+            if (jwtService.validateToken(jwt)) {
+                userEmail = jwtService.extractUsername(jwt);
+                Long userId = jwtService.extractUserId(jwt);
+                String userRole = jwtService.extractUserRole(jwt);
 
-            if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                if (jwtService.validateToken(jwt)) {
+                System.out.println("DEBUG: Processing request for user: " + userEmail);
+                System.out.println("DEBUG: Extracted Role from Token: " + userRole);
+
+                if (userEmail != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    // Ensure role has ROLE_ prefix if not already present
+                    String roleName = userRole.startsWith("ROLE_") ? userRole : "ROLE_" + userRole;
+                    System.out.println("DEBUG: Assigned Authority: " + roleName);
+
+                    SimpleGrantedAuthority authority = new SimpleGrantedAuthority(roleName);
+                    
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userEmail,
                             null,
-                            Collections.singletonList(new SimpleGrantedAuthority(userRole))
+                            Collections.singletonList(authority)
                     );
                     authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
@@ -55,10 +69,17 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     request.setAttribute("userRole", userRole);
 
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    System.out.println("DEBUG: Authentication successful for " + userEmail);
                 }
             }
+        } catch (ExpiredJwtException | MalformedJwtException e) {
+            System.out.println("DEBUG: Token validation failed: " + e.getMessage());
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("Token is invalid or expired");
+            return;
         } catch (Exception e) {
-            // Token validation failed - continue without authentication
+            System.out.println("DEBUG: Unexpected authentication error: " + e.getMessage());
+            e.printStackTrace();
         }
 
         filterChain.doFilter(request, response);
