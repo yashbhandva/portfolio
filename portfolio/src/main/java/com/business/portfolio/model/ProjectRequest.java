@@ -1,5 +1,6 @@
 package com.business.portfolio.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.math.BigDecimal;
@@ -15,6 +16,7 @@ public class ProjectRequest {
 
     @ManyToOne
     @JoinColumn(name = "client_id")
+    @JsonIgnore
     private User client;
 
     @ManyToOne
@@ -39,6 +41,7 @@ public class ProjectRequest {
 
     @ManyToOne
     @JoinColumn(name = "assigned_team_member_id")
+    @JsonIgnore
     private TeamMember assignedTeamMember;
 
     private LocalDateTime createdAt;
