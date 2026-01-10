@@ -19,7 +19,11 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/portfolio/portfolio.component').then(m => m.PortfolioComponent)
   },
   {
-    path: 'contact',
+    path: 'contact', // General Contact (Simple)
+    loadComponent: () => import('./pages/simple-contact/simple-contact.component').then(m => m.SimpleContactComponent)
+  },
+  {
+    path: 'start-project', // Project Request (Detailed)
     loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent)
   },
   {
