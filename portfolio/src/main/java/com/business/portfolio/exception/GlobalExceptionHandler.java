@@ -41,13 +41,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ApiResponse<Void>> handleRuntimeException(RuntimeException ex) {
+        ex.printStackTrace(); // Print stack trace for debugging
+        String message = ex.getMessage() != null ? ex.getMessage() : "Runtime error occurred";
         return ResponseEntity.badRequest()
-                .body(ApiResponse.error(ex.getMessage(), "BAD_REQUEST"));
+                .body(ApiResponse.error(message, "BAD_REQUEST"));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiResponse<Void>> handleException(Exception ex) {
+        ex.printStackTrace(); // Print stack trace for debugging
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(ApiResponse.error("An unexpected error occurred", "INTERNAL_SERVER_ERROR"));
+                .body(ApiResponse.error("An unexpected error occurred: " + ex.getMessage(), "INTERNAL_SERVER_ERROR"));
     }
 }
