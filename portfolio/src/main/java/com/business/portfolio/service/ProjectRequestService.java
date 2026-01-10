@@ -1,15 +1,19 @@
 package com.business.portfolio.service;
 
+import com.business.portfolio.dto.ProjectDto;
 import com.business.portfolio.dto.ProjectRequestDto;
 import com.business.portfolio.dto.ServiceDto;
 import com.business.portfolio.model.Notification;
+import com.business.portfolio.model.Project;
 import com.business.portfolio.model.ProjectRequest;
 import com.business.portfolio.model.User;
+import com.business.portfolio.repository.ProjectRepository;
 import com.business.portfolio.repository.ProjectRequestRepository;
 import com.business.portfolio.repository.UserRepository;
 import com.business.portfolio.repository.ServiceRepository;
 import com.business.portfolio.repository.TeamMemberRepository;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -19,10 +23,12 @@ import java.util.stream.Collectors;
 public class ProjectRequestService {
 
     private final ProjectRequestRepository projectRequestRepository;
+    private final ProjectRepository projectRepository;
     private final UserRepository userRepository;
     private final ServiceRepository serviceRepository;
     private final TeamMemberRepository teamMemberRepository;
     private final NotificationService notificationService;
+    private final ModelMapper modelMapper;
 
     public ProjectRequestDto.ProjectRequestResponse createProjectRequest(
             Long clientId, ProjectRequestDto.CreateProjectRequest request) {
@@ -61,6 +67,55 @@ public class ProjectRequestService {
         );
 
         return convertToResponse(savedRequest);
+    }
+
+    public ProjectDto.ProjectResponse approveAndCreateProject(Long projectRequestId) {
+        ProjectRequest request = projectRequestRepository.findById(projectRequestId)
+                .orElseThrow(() -> new RuntimeException("Project Request not found"));
+
+        if (request.getStatus() != ProjectRequest.ProjectStatus.PENDING) {
+            throw new RuntimeException("Project has already been actioned.");
+        }
+
+        // Create a new Project from the request
+        Project project = new Project();
+        project.setTitle(request.getProjectTitle());
+        project.setDescription(request.getProjectDescription());
+        project.setClientName(request.getClient().getName());
+        project.setCategory(request.getService().getCategory());
+        project.setTechnologies("Pending");
+        project.setImageUrl("https://via.placeholder.com/300");
+        project.setFeatured(false);
+
+        Project savedProject = projectRepository.save(project);
+
+        // Update request status
+        request.setStatus(ProjectRequest.ProjectStatus.APPROVED);
+        projectRequestRepository.save(request);
+
+        // Notify client
+        notificationService.createNotification(
+            request.getClient(),
+            "Project Approved!",
+            "Your project '" + request.getProjectTitle() + "' has been approved and is now active.",
+            Notification.NotificationType.PROJECT_UPDATE,
+            savedProject.getId()
+        );
+
+        // Manual mapping to avoid ModelMapper issues
+        ProjectDto.ProjectResponse response = new ProjectDto.ProjectResponse();
+        response.setId(savedProject.getId());
+        response.setTitle(savedProject.getTitle());
+        response.setDescription(savedProject.getDescription());
+        response.setCategory(savedProject.getCategory());
+        response.setTechnologies(savedProject.getTechnologies());
+        response.setImageUrl(savedProject.getImageUrl());
+        response.setClientName(savedProject.getClientName());
+        response.setFeatured(savedProject.isFeatured());
+        response.setCreatedAt(savedProject.getCreatedAt());
+        response.setUpdatedAt(savedProject.getUpdatedAt());
+
+        return response;
     }
 
     public List<ProjectRequestDto.ProjectRequestResponse> getClientRequests(Long clientId) {
@@ -112,7 +167,7 @@ public class ProjectRequestService {
         return convertToResponse(updatedRequest);
     }
 
-    // 🔍 SEARCH METHODS
+    // ... (rest of the methods)
     public List<ProjectRequestDto.ProjectRequestResponse> searchRequestsByTitle(String title) {
         return projectRequestRepository.findByProjectTitleContainingIgnoreCase(title)
                 .stream()
