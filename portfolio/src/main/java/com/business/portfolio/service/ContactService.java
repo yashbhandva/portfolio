@@ -6,6 +6,8 @@ import com.business.portfolio.model.User;
 import com.business.portfolio.repository.ContactRepository;
 import com.business.portfolio.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,6 +18,7 @@ public class ContactService {
 
     private final ContactRepository contactRepository;
     private final UserRepository userRepository;
+    private final JavaMailSender emailSender;
 
     public ContactDto.ContactResponse createContact(ContactDto.ContactRequest request) {
         Contact contact = new Contact();
@@ -24,9 +27,8 @@ public class ContactService {
         contact.setPhone(request.getPhone());
         contact.setSubject(request.getSubject());
         contact.setMessage(request.getMessage());
-        contact.setStatus(Contact.ContactStatus.NEW); // Explicitly set status
+        contact.setStatus(Contact.ContactStatus.NEW);
 
-        // If user exists with this email, link the contact
         userRepository.findByEmail(request.getEmail()).ifPresent(contact::setUser);
 
         Contact savedContact = contactRepository.save(contact);
@@ -40,12 +42,10 @@ public class ContactService {
                 .collect(Collectors.toList());
     }
 
-    // Admin method to get all contacts as entities
     public List<Contact> getAllContactEntities() {
         return contactRepository.findAll();
     }
 
-    // Admin method to get all contacts with proper ordering
     public List<ContactDto.ContactResponse> getAllContactsForAdmin() {
         return contactRepository.findAllOrderByCreatedAtDesc()
                 .stream()
@@ -67,6 +67,27 @@ public class ContactService {
         contact.setStatus(request.getStatus());
         Contact updatedContact = contactRepository.save(contact);
         return convertToResponse(updatedContact);
+    }
+
+    public void replyToContact(Long contactId, String replyMessage) {
+        Contact contact = contactRepository.findById(contactId)
+                .orElseThrow(() -> new RuntimeException("Contact not found"));
+
+        // Send Email
+        try {
+            SimpleMailMessage message = new SimpleMailMessage();
+            message.setTo(contact.getEmail());
+            message.setSubject("Re: " + contact.getSubject());
+            message.setText(replyMessage);
+            emailSender.send(message);
+        } catch (Exception e) {
+            System.err.println("Failed to send email: " + e.getMessage());
+            // Continue to update status even if email fails (for demo purposes)
+        }
+
+        // Update status to RESOLVED
+        contact.setStatus(Contact.ContactStatus.RESOLVED);
+        contactRepository.save(contact);
     }
 
     public List<ContactDto.ContactResponse> getUserContacts(Long userId) {
