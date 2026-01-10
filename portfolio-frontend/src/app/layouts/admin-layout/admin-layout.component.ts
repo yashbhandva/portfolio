@@ -23,6 +23,10 @@ import { NotificationService } from '../../services/notification.service';
             <i class="fas fa-inbox"></i>
             Requests
           </a>
+          <a routerLink="/admin/notifications" routerLinkActive="active" class="nav-item">
+            <i class="fas fa-bell"></i>
+            Notifications
+          </a>
           <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item">
             <i class="fas fa-project-diagram"></i>
             Portfolio
