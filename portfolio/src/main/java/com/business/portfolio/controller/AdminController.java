@@ -1,6 +1,7 @@
 package com.business.portfolio.controller;
 
 import com.business.portfolio.dto.ApiResponse;
+import com.business.portfolio.dto.ContactDto;
 import com.business.portfolio.model.*;
 import com.business.portfolio.service.*;
 import lombok.Data;
@@ -135,6 +136,28 @@ public class AdminController {
         }
     }
 
+    @PutMapping("/contacts/{id}/status")
+    public ResponseEntity<ApiResponse<ContactDto.ContactResponse>> updateContactStatus(
+            @PathVariable Long id, @RequestBody ContactDto.UpdateContactStatus request) {
+        try {
+            ContactDto.ContactResponse response = contactService.updateContactStatus(id, request);
+            return ResponseEntity.ok(ApiResponse.success("Contact status updated successfully", response));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to update contact status: " + e.getMessage()));
+        }
+    }
+
+    @PostMapping("/contacts/{id}/reply")
+    public ResponseEntity<ApiResponse<Void>> replyToContact(
+            @PathVariable Long id, @RequestBody ReplyRequest request) {
+        try {
+            contactService.replyToContact(id, request.getMessage());
+            return ResponseEntity.ok(ApiResponse.success("Reply sent successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to send reply: " + e.getMessage()));
+        }
+    }
+
     // Users Management
     @GetMapping("/users")
     public ResponseEntity<ApiResponse<List<User>>> getAllUsers() {
@@ -143,6 +166,26 @@ public class AdminController {
             return ResponseEntity.ok(ApiResponse.success("Users retrieved successfully", users));
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.error("Failed to get users: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<User>> updateUser(@PathVariable Long id, @RequestBody User user) {
+        try {
+            User updatedUser = userService.adminUpdateUser(id, user);
+            return ResponseEntity.ok(ApiResponse.success("User updated successfully", updatedUser));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to update user: " + e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<ApiResponse<Void>> deleteUser(@PathVariable Long id) {
+        try {
+            userService.deleteUser(id);
+            return ResponseEntity.ok(ApiResponse.success("User deleted successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error("Failed to delete user: " + e.getMessage()));
         }
     }
 
@@ -170,5 +213,10 @@ public class AdminController {
         private String title;
         private String message;
         private boolean broadcast;
+    }
+
+    @Data
+    public static class ReplyRequest {
+        private String message;
     }
 }
