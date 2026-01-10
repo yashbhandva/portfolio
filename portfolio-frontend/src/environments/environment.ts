@@ -1,6 +1,6 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:8080/api',
+  apiUrl: 'https://portfolio-latest-hqe4.onrender.com',
   appName: 'Portfolio Website',
   cacheTimeout: 300000, // 5 minutes
   enablePerformanceLogging: true
