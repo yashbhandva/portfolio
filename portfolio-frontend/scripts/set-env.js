@@ -14,15 +14,20 @@ const targetPath = path.resolve(__dirname, '../src/environments/environment.ts')
 const targetProdPath = path.resolve(__dirname, '../src/environments/environment.prod.ts');
 
 // Define environment content
+const apiUrl = process.env.API_URL || "/api"; // Default to relative path for proxy
+const production = process.env.PRODUCTION === 'true' || false;
+
 const envConfigFile = `export const environment = {
-  production: ${process.env.PRODUCTION || false},
-  apiUrl: '${process.env.API_URL || "http://localhost:8080/api"}'
+  production: ${production},
+  apiUrl: '${apiUrl}'
 };
 `;
 
+// For production, we use the live URL.
+const prodApiUrl = "https://portfolio-latest-hqe4.onrender.com/api";
 const envProdConfigFile = `export const environment = {
   production: true,
-  apiUrl: '${process.env.API_URL || "http://localhost:8080/api"}'
+  apiUrl: '${prodApiUrl}'
 };
 `;
 
