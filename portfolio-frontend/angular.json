@@ -28,7 +28,8 @@
           "options": {
             "buildTarget": "portfolio-website:build",
             "port": 4200,
-            "host": "localhost"
+            "host": "localhost",
+            "proxyConfig": "proxy.conf.json"
           }
         }
       }
