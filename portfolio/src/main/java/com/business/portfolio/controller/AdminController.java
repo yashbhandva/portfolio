@@ -3,6 +3,7 @@ package com.business.portfolio.controller;
 import com.business.portfolio.dto.ApiResponse;
 import com.business.portfolio.model.*;
 import com.business.portfolio.service.*;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ public class AdminController {
     private final ServiceService serviceService;
     private final ContactService contactService;
     private final UserService userService;
+    private final NotificationService notificationService;
 
     // Dashboard Stats
     @GetMapping("/dashboard/stats")
@@ -142,5 +144,31 @@ public class AdminController {
         } catch (Exception e) {
             return ResponseEntity.badRequest().body(ApiResponse.error("Failed to get users: " + e.getMessage()));
         }
+    }
+
+    // 🔔 Send Notification
+    @PostMapping("/notifications/send")
+    public ResponseEntity<ApiResponse<Void>> sendNotification(@RequestBody SendNotificationRequest request) {
+        try {
+            if (request.isBroadcast()) {
+                notificationService.broadcastToAll(request.getTitle(), request.getMessage());
+            } else if (request.getUserId() != null) {
+                notificationService.sendToUser(request.getUserId(), request.getTitle(), request.getMessage());
+            } else {
+                throw new RuntimeException("Recipient not specified");
+            }
+            return ResponseEntity.ok(ApiResponse.success("Notification sent successfully", null));
+        } catch (Exception e) {
+            return ResponseEntity.badRequest()
+                    .body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
+    @Data
+    public static class SendNotificationRequest {
+        private Long userId;
+        private String title;
+        private String message;
+        private boolean broadcast;
     }
 }
