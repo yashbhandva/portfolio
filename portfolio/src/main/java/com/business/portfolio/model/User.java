@@ -48,6 +48,10 @@ public class User {
     @JsonIgnore
     private List<ProjectRequest> projectRequests;
 
+    @OneToMany(mappedBy = "recipient", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonIgnore
+    private List<Notification> notifications;
+
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @JsonIgnore
     private UserProfile userProfile;
