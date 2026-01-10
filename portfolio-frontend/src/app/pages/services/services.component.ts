@@ -91,8 +91,8 @@ export class ServicesComponent implements OnInit {
   }
 
   buyService(service: any) {
-    // Navigate to contact page with service pre-selected
-    this.router.navigate(['/contact'], {
+    // Navigate to start-project page with service pre-selected
+    this.router.navigate(['/start-project'], {
       queryParams: {
         service: service.name,
         serviceId: service.id
