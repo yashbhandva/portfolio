@@ -31,6 +31,10 @@ export class AdminService {
     return this.http.put<ApiResponse<any>>(`${this.apiUrl}/admin/project-requests/${id}/status`, { status });
   }
 
+  approveProjectRequest(id: number): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/admin/project-requests/${id}/approve`, {});
+  }
+
   // Services
   getAllServices(): Observable<ApiResponse<any[]>> {
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/admin/services`);
@@ -82,5 +86,10 @@ export class AdminService {
 
   deleteUser(id: number): Observable<ApiResponse<any>> {
     return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/users/${id}`);
+  }
+
+  // Notifications
+  sendNotification(data: { userId?: number, title: string, message: string, broadcast: boolean }): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/admin/notifications/send`, data);
   }
 }
