@@ -2,6 +2,7 @@ package com.business.portfolio.service;
 
 import com.business.portfolio.dto.ProjectRequestDto;
 import com.business.portfolio.dto.ServiceDto;
+import com.business.portfolio.model.Notification;
 import com.business.portfolio.model.ProjectRequest;
 import com.business.portfolio.model.User;
 import com.business.portfolio.repository.ProjectRequestRepository;
@@ -21,6 +22,7 @@ public class ProjectRequestService {
     private final UserRepository userRepository;
     private final ServiceRepository serviceRepository;
     private final TeamMemberRepository teamMemberRepository;
+    private final NotificationService notificationService;
 
     public ProjectRequestDto.ProjectRequestResponse createProjectRequest(
             Long clientId, ProjectRequestDto.CreateProjectRequest request) {
@@ -49,6 +51,15 @@ public class ProjectRequestService {
         projectRequest.setPriority(request.getPriority());
 
         ProjectRequest savedRequest = projectRequestRepository.save(projectRequest);
+
+        // 🔔 Notify Admin
+        notificationService.notifyAdmin(
+            "New Project Request",
+            "Client " + client.getName() + " has requested a new project: " + request.getProjectTitle(),
+            Notification.NotificationType.PROJECT_REQUEST,
+            savedRequest.getId()
+        );
+
         return convertToResponse(savedRequest);
     }
 
@@ -75,6 +86,7 @@ public class ProjectRequestService {
         ProjectRequest projectRequest = projectRequestRepository.findById(requestId)
                 .orElseThrow(() -> new RuntimeException("Project request not found"));
 
+        ProjectRequest.ProjectStatus oldStatus = projectRequest.getStatus();
         projectRequest.setStatus(request.getStatus());
 
         if (request.getAssignedTeamMemberId() != null) {
@@ -85,6 +97,18 @@ public class ProjectRequestService {
         }
 
         ProjectRequest updatedRequest = projectRequestRepository.save(projectRequest);
+
+        // 🔔 Notify Client if status changed
+        if (oldStatus != request.getStatus()) {
+            notificationService.createNotification(
+                projectRequest.getClient(),
+                "Project Status Updated",
+                "Your project '" + projectRequest.getProjectTitle() + "' status has been updated to " + request.getStatus(),
+                Notification.NotificationType.PROJECT_UPDATE,
+                updatedRequest.getId()
+            );
+        }
+
         return convertToResponse(updatedRequest);
     }
 
