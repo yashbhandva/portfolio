@@ -9,26 +9,24 @@ import java.time.LocalDateTime;
 @Data
 public class ContactDto {
 
-    // Contact Request
     @Data
     public static class ContactRequest {
-        @NotBlank(message = "Name is required")
+        @NotBlank
         private String name;
 
-        @NotBlank(message = "Email is required")
-        @Email(message = "Email should be valid")
+        @NotBlank
+        @Email
         private String email;
 
         private String phone;
 
-        @NotBlank(message = "Subject is required")
+        @NotBlank
         private String subject;
 
-        @NotBlank(message = "Message is required")
+        @NotBlank
         private String message;
     }
 
-    // Contact Response
     @Data
     public static class ContactResponse {
         private Long id;
@@ -37,16 +35,16 @@ public class ContactDto {
         private String phone;
         private String subject;
         private String message;
+        private String adminReply; // New field
         private Contact.ContactStatus status;
         private LocalDateTime createdAt;
+        private LocalDateTime repliedAt; // New field
         private Long userId;
         private String userName;
     }
 
-    // Contact Status Update
     @Data
     public static class UpdateContactStatus {
         private Contact.ContactStatus status;
-        private String adminNotes;
     }
 }
