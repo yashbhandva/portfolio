@@ -13,8 +13,13 @@ export const ADMIN_ROUTES: Routes = [
     canActivate: [AuthGuard]
   },
   {
-    path: 'requests', // New route for Project Requests
+    path: 'requests',
     loadComponent: () => import('./project-requests/project-requests.component').then(m => m.AdminProjectRequestsComponent),
+    canActivate: [AuthGuard]
+  },
+  {
+    path: 'notifications', // New route
+    loadComponent: () => import('./notifications/notifications.component').then(m => m.AdminNotificationsComponent),
     canActivate: [AuthGuard]
   },
   {
