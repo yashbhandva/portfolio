@@ -27,7 +27,7 @@ import { AdminService } from '../../../services/admin.service';
                 <th>Project</th>
                 <th>Service</th>
                 <th>Budget</th>
-                <th>Status (Debug)</th> <!-- Added Debug Header -->
+                <th>Status (Debug)</th>
                 <th>Date</th>
                 <th>Actions</th>
               </tr>
@@ -56,16 +56,17 @@ import { AdminService } from '../../../services/admin.service';
                   </td>
                   <td>{{ request.budget | currency }}</td>
                   <td>
-                    <!-- DEBUG: Printing the raw status value -->
                     <span class="status-badge" [ngClass]="request.status">
                       {{ request.status }}
                     </span>
-                    <small style="display:block; color: #999;">Raw: "{{ request.status }}"</small>
                   </td>
                   <td>{{ request.createdAt | date:'mediumDate' }}</td>
                   <td>
                     <div class="action-buttons">
-                      <!-- Simplified check and added debug log -->
+                      <button class="btn-icon btn-message" (click)="openMessageModal(request)" title="Message Client">
+                        <i class="fas fa-comment-alt"></i>
+                      </button>
+
                       @if (isPending(request.status)) {
                         <button
                           class="btn-approve"
@@ -101,6 +102,44 @@ import { AdminService } from '../../../services/admin.service';
           <p>New requests will appear here</p>
         </div>
       }
+
+      <!-- Message Modal -->
+      @if (showMessageModal()) {
+        <div class="modal-overlay" (click)="closeMessageModal()">
+          <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h3>Message Client</h3>
+              <button class="btn-close" (click)="closeMessageModal()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label>To:</label>
+                <input type="text" [value]="selectedRequest()?.client?.name" disabled class="form-input">
+              </div>
+              <div class="form-group">
+                <label>Subject:</label>
+                <input type="text" [(ngModel)]="messageSubject" class="form-input" placeholder="Subject">
+              </div>
+              <div class="form-group">
+                <label>Message:</label>
+                <textarea [(ngModel)]="messageBody" class="form-textarea" rows="5" placeholder="Type your message..."></textarea>
+              </div>
+              <div class="form-actions">
+                <button class="btn btn-outline" (click)="closeMessageModal()">Cancel</button>
+                <button class="btn btn-primary" (click)="sendMessage()" [disabled]="sending() || !messageBody">
+                  @if (sending()) {
+                    <i class="fas fa-spinner fa-spin"></i> Sending...
+                  } @else {
+                    <i class="fas fa-paper-plane"></i> Send Message
+                  }
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
   styleUrls: ['./project-requests.component.scss']
@@ -112,6 +151,13 @@ export class AdminProjectRequestsComponent implements OnInit {
   updating = signal<number | null>(null);
   requests = signal<any[]>([]);
 
+  // Message Modal
+  showMessageModal = signal(false);
+  selectedRequest = signal<any>(null);
+  messageSubject = '';
+  messageBody = '';
+  sending = signal(false);
+
   ngOnInit() {
     this.loadRequests();
   }
@@ -121,7 +167,6 @@ export class AdminProjectRequestsComponent implements OnInit {
     this.adminService.getAllProjectRequests().subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          console.log('Loaded requests:', response.data);
           this.requests.set(response.data);
         }
         this.loading.set(false);
@@ -134,7 +179,6 @@ export class AdminProjectRequestsComponent implements OnInit {
   }
 
   isPending(status: string): boolean {
-    console.log('Checking status:', status); // Debug log
     if (!status) return false;
     return status.toUpperCase() === 'PENDING';
   }
@@ -167,6 +211,44 @@ export class AdminProjectRequestsComponent implements OnInit {
       error: (error) => {
         console.error('Error approving request:', error);
         this.updating.set(null);
+      }
+    });
+  }
+
+  openMessageModal(request: any) {
+    this.selectedRequest.set(request);
+    this.messageSubject = `Regarding your project: ${request.projectTitle}`;
+    this.messageBody = '';
+    this.showMessageModal.set(true);
+  }
+
+  closeMessageModal() {
+    this.showMessageModal.set(false);
+    this.selectedRequest.set(null);
+  }
+
+  sendMessage() {
+    if (!this.selectedRequest() || !this.messageBody) return;
+
+    this.sending.set(true);
+    const payload = {
+      userId: this.selectedRequest().client.id,
+      title: this.messageSubject,
+      message: this.messageBody,
+      broadcast: false
+    };
+
+    this.adminService.sendNotification(payload).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.closeMessageModal();
+          alert('Message sent successfully!');
+        }
+        this.sending.set(false);
+      },
+      error: (error) => {
+        console.error('Error sending message:', error);
+        this.sending.set(false);
       }
     });
   }
