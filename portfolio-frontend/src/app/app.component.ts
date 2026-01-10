@@ -10,13 +10,13 @@ import { filter } from 'rxjs/operators';
   standalone: true,
   imports: [RouterOutlet, HeaderComponent, FooterComponent, CommonModule],
   template: `
-    @if (!isAdminRoute) {
+    @if (!isDashboardRoute) {
       <app-header></app-header>
     }
-    <main [class.admin-main]="isAdminRoute">
+    <main [class.dashboard-main]="isDashboardRoute">
       <router-outlet></router-outlet>
     </main>
-    @if (!isAdminRoute) {
+    @if (!isDashboardRoute) {
       <app-footer></app-footer>
     }
   `,
@@ -24,13 +24,15 @@ import { filter } from 'rxjs/operators';
 })
 export class AppComponent {
   title = 'Portfolio Website';
-  isAdminRoute = false;
+  isDashboardRoute = false;
 
   constructor(private router: Router) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe((event) => {
-        this.isAdminRoute = (event as NavigationEnd).url.startsWith('/admin');
+        const url = (event as NavigationEnd).url;
+        // Check if the current route is a dashboard route
+        this.isDashboardRoute = url.includes('/admin') || url.includes('/client');
       });
   }
 }
