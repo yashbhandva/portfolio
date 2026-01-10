@@ -1,12 +1,13 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
   selector: 'app-admin-contacts',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
     <div class="contacts-container">
       <div class="page-header">
@@ -66,7 +67,7 @@ import { AdminService } from '../../../services/admin.service';
             </tr>
           </thead>
           <tbody>
-            @for (contact of filteredContacts(); track contact.id) {
+            @for (contact of paginatedContacts(); track contact.id) {
               <tr [class.unread]="contact.status === 'NEW'">
                 <td>
                   <div class="contact-cell">
@@ -107,6 +108,15 @@ import { AdminService } from '../../../services/admin.service';
           </tbody>
         </table>
       </div>
+
+      <!-- Pagination Controls -->
+      <app-pagination-controls
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize()"
+        [totalItems]="filteredContacts().length"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)">
+      </app-pagination-controls>
 
       @if (filteredContacts().length === 0) {
         <div class="empty-state">
@@ -198,6 +208,17 @@ export class ContactsComponent implements OnInit {
   searchTerm = '';
   selectedStatus = '';
 
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+
+  // Computed signal for paginated data
+  paginatedContacts = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    return this.filteredContacts().slice(startIndex, endIndex);
+  });
+
   // Modal state
   showModal = signal(false);
   isReplying = signal(false);
@@ -247,6 +268,16 @@ export class ContactsComponent implements OnInit {
     }
 
     this.filteredContacts.set(filtered);
+    this.currentPage.set(1); // Reset to page 1 on filter
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+    this.currentPage.set(1);
   }
 
   viewContact(contactId: number): void {
