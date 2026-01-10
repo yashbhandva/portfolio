@@ -169,33 +169,53 @@ import { ContactRequest } from '../../models/contact.model';
                   </div>
                 </div>
 
-                <div class="form-group">
-                  <label for="subject" class="form-label">
-                    Subject *
-                  </label>
-                  <select
-                    id="subject"
-                    name="subject"
-                    [(ngModel)]="formData.subject"
-                    #subject="ngModel"
-                    required
-                    [class.error]="subject.invalid && subject.touched"
-                    class="form-select">
-                    <option value="">Select a subject</option>
-                    <option value="General Inquiry">General Inquiry</option>
-                    <option value="Web Development">Web Development</option>
-                    <option value="Mobile App Development">Mobile App Development</option>
-                    <option value="UI/UX Design">UI/UX Design</option>
-                    <option value="Digital Marketing">Digital Marketing</option>
-                    <option value="Partnership">Partnership</option>
-                    <option value="Careers">Careers</option>
-                    <option value="Other">Other</option>
-                  </select>
-                  @if (subject.invalid && subject.touched) {
-                    <div class="error-text">
-                      Please select a subject
-                    </div>
-                  }
+                <div class="form-row">
+                  <div class="form-group">
+                    <label for="subject" class="form-label">
+                      Subject *
+                    </label>
+                    <select
+                      id="subject"
+                      name="subject"
+                      [(ngModel)]="formData.subject"
+                      #subject="ngModel"
+                      required
+                      [class.error]="subject.invalid && subject.touched"
+                      class="form-select">
+                      <option value="">Select a subject</option>
+                      <option value="General Inquiry">General Inquiry</option>
+                      <option value="Web Development">Web Development</option>
+                      <option value="Mobile App Development">Mobile App Development</option>
+                      <option value="UI/UX Design">UI/UX Design</option>
+                      <option value="Digital Marketing">Digital Marketing</option>
+                      <option value="Partnership">Partnership</option>
+                      <option value="Careers">Careers</option>
+                      <option value="Other">Other</option>
+                    </select>
+                    @if (subject.invalid && subject.touched) {
+                      <div class="error-text">
+                        Please select a subject
+                      </div>
+                    }
+                  </div>
+
+                  <div class="form-group">
+                    <label for="budget" class="form-label">
+                      Estimated Budget
+                    </label>
+                    <select
+                      id="budget"
+                      name="budget"
+                      [(ngModel)]="selectedBudget"
+                      class="form-select">
+                      <option value="0">Select a budget range</option>
+                      <option value="500">$500 - $1,000</option>
+                      <option value="1000">$1,000 - $2,500</option>
+                      <option value="2500">$2,500 - $5,000</option>
+                      <option value="5000">$5,000 - $10,000</option>
+                      <option value="10000">$10,000+</option>
+                    </select>
+                  </div>
                 </div>
 
                 <div class="form-group">
@@ -450,6 +470,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
   firstName = '';
   lastName = '';
   selectedServiceId: number | null = null;
+  selectedBudget: string = '0'; // New field for budget
 
   ngOnInit() {
     this.checkPreSelectedService();
@@ -525,7 +546,7 @@ export class ContactComponent implements OnInit, AfterViewInit {
         projectTitle: this.formData.subject,
         projectDescription: this.formData.message,
         serviceId: this.selectedServiceId || 1, // Use selected service ID or default to 1
-        budget: 0,
+        budget: +this.selectedBudget, // Use selected budget
         timelineDays: 30,
         priority: 'MEDIUM'
       };
@@ -585,5 +606,6 @@ export class ContactComponent implements OnInit, AfterViewInit {
       message: ''
     };
     this.selectedServiceId = null;
+    this.selectedBudget = '0';
   }
 }
