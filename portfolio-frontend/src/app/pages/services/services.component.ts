@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
-import { AdminService } from '../../services/admin.service';
+import { ServiceService } from '../../services/service.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -64,7 +64,7 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./services.component.scss']
 })
 export class ServicesComponent implements OnInit {
-  private adminService = inject(AdminService);
+  private serviceService = inject(ServiceService);
   private router = inject(Router);
   private authService = inject(AuthService);
 
@@ -76,12 +76,10 @@ export class ServicesComponent implements OnInit {
   }
 
   loadServices() {
-    this.adminService.getAllServices().subscribe({
+    this.serviceService.getActiveServices().subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          // Filter only active services
-          const activeServices = response.data.filter((s: any) => s.active);
-          this.services.set(activeServices);
+          this.services.set(response.data);
         }
         this.loading.set(false);
       },
