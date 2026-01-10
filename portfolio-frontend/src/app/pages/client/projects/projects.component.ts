@@ -1,13 +1,14 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
   selector: 'app-client-projects',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
     <div class="projects-container">
       <div class="page-header">
@@ -45,7 +46,7 @@ import { AuthService } from '../../../services/auth.service';
       </div>
 
       <div class="projects-grid" *ngIf="!loading(); else loadingTemplate">
-        <div class="project-card" *ngFor="let project of filteredProjects()">
+        <div class="project-card" *ngFor="let project of paginatedProjects()">
           <div class="project-header">
             <div class="title-section">
               <h3 class="project-title">{{ project.projectTitle }}</h3>
@@ -85,6 +86,15 @@ import { AuthService } from '../../../services/auth.service';
         </div>
       </div>
 
+      <app-pagination-controls
+        *ngIf="!loading()"
+        [currentPage]="currentPage()"
+        [pageSize]="pageSize()"
+        [totalItems]="filteredProjects().length"
+        (pageChange)="onPageChange($event)"
+        (pageSizeChange)="onPageSizeChange($event)">
+      </app-pagination-controls>
+
       <ng-template #loadingTemplate>
         <div class="loading-state">
           <i class="fas fa-spinner fa-spin"></i>
@@ -105,6 +115,16 @@ export class ClientProjectsComponent implements OnInit {
 
   searchTerm = '';
   statusFilter = 'ALL';
+
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+
+  paginatedProjects = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    return this.filteredProjects().slice(startIndex, endIndex);
+  });
 
   ngOnInit() {
     this.loadProjects();
@@ -142,5 +162,15 @@ export class ClientProjectsComponent implements OnInit {
     }
 
     this.filteredProjects.set(filtered);
+    this.currentPage.set(1);
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+    this.currentPage.set(1);
   }
 }
