@@ -2,6 +2,7 @@ package com.business.portfolio.service;
 
 import com.business.portfolio.dto.ContactDto;
 import com.business.portfolio.model.Contact;
+import com.business.portfolio.model.Notification;
 import com.business.portfolio.model.User;
 import com.business.portfolio.repository.ContactRepository;
 import com.business.portfolio.repository.UserRepository;
@@ -9,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +21,7 @@ public class ContactService {
     private final ContactRepository contactRepository;
     private final UserRepository userRepository;
     private final JavaMailSender emailSender;
+    private final NotificationService notificationService;
 
     public ContactDto.ContactResponse createContact(ContactDto.ContactRequest request) {
         Contact contact = new Contact();
@@ -32,6 +35,15 @@ public class ContactService {
         userRepository.findByEmail(request.getEmail()).ifPresent(contact::setUser);
 
         Contact savedContact = contactRepository.save(contact);
+        
+        // Notify Admin
+        notificationService.notifyAdmin(
+            "New Contact Message",
+            "New message from " + request.getName() + ": " + request.getSubject(),
+            Notification.NotificationType.SYSTEM,
+            savedContact.getId()
+        );
+        
         return convertToResponse(savedContact);
     }
 
@@ -73,6 +85,12 @@ public class ContactService {
         Contact contact = contactRepository.findById(contactId)
                 .orElseThrow(() -> new RuntimeException("Contact not found"));
 
+        // Save reply to database
+        contact.setAdminReply(replyMessage);
+        contact.setRepliedAt(LocalDateTime.now());
+        contact.setStatus(Contact.ContactStatus.RESOLVED);
+        contactRepository.save(contact);
+
         // Send Email
         try {
             SimpleMailMessage message = new SimpleMailMessage();
@@ -82,12 +100,18 @@ public class ContactService {
             emailSender.send(message);
         } catch (Exception e) {
             System.err.println("Failed to send email: " + e.getMessage());
-            // Continue to update status even if email fails (for demo purposes)
         }
-
-        // Update status to RESOLVED
-        contact.setStatus(Contact.ContactStatus.RESOLVED);
-        contactRepository.save(contact);
+        
+        // Notify User if they are registered
+        if (contact.getUser() != null) {
+            notificationService.createNotification(
+                contact.getUser(),
+                "New Reply to your Message",
+                "Admin replied to: " + contact.getSubject(),
+                Notification.NotificationType.SYSTEM,
+                contact.getId()
+            );
+        }
     }
 
     public List<ContactDto.ContactResponse> getUserContacts(Long userId) {
@@ -109,8 +133,10 @@ public class ContactService {
         response.setPhone(contact.getPhone());
         response.setSubject(contact.getSubject());
         response.setMessage(contact.getMessage());
+        response.setAdminReply(contact.getAdminReply()); // Map reply
         response.setStatus(contact.getStatus());
         response.setCreatedAt(contact.getCreatedAt());
+        response.setRepliedAt(contact.getRepliedAt()); // Map repliedAt
 
         if (contact.getUser() != null) {
             response.setUserId(contact.getUser().getId());
