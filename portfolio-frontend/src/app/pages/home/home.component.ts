@@ -105,21 +105,21 @@ export class HomeComponent implements AfterViewInit {
     {
       title: 'E-Commerce Platform',
       description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
-      image: 'https://via.placeholder.com/400x300/667eea/ffffff?text=E-Commerce+Platform',
+      image: '/assets/images/projects/E-Commerce Platform.jpg',
       technologies: ['Angular', 'Spring Boot', 'MySQL', 'Stripe'],
       liveUrl: 'https://demo-ecommerce.com'
     },
     {
       title: 'Task Management App',
       description: 'Productivity app for team collaboration and task tracking with real-time updates.',
-      image: 'https://via.placeholder.com/400x300/10b981/ffffff?text=Task+Management+App',
+      image: '/assets/images/projects/Task Management App.jpg',
       technologies: ['React Native', 'Node.js', 'MongoDB', 'Socket.io'],
       liveUrl: 'https://demo-taskapp.com'
     },
     {
       title: 'Portfolio Website',
       description: 'Modern portfolio website with animations and content management system.',
-      image: 'https://via.placeholder.com/400x300/f59e0b/ffffff?text=Portfolio+Website',
+      image: '/assets/images/projects/Portfolio Website.jpg',
       technologies: ['Angular', 'Three.js', 'GSAP', 'SCSS'],
       liveUrl: 'https://demo-portfolio.com'
     }
