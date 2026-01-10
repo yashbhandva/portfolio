@@ -29,6 +29,9 @@ public class Contact {
 
     @Column(length = 1000)
     private String message;
+    
+    @Column(length = 1000)
+    private String adminReply; // New field for admin response
 
     @Enumerated(EnumType.STRING)
     private ContactStatus status = ContactStatus.NEW;
@@ -39,6 +42,7 @@ public class Contact {
     private User user;
 
     private LocalDateTime createdAt;
+    private LocalDateTime repliedAt; // Track when reply was sent
 
     public enum ContactStatus {
         NEW, IN_PROGRESS, RESOLVED, SPAM
