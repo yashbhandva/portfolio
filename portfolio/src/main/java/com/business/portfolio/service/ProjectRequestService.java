@@ -25,11 +25,19 @@ public class ProjectRequestService {
     public ProjectRequestDto.ProjectRequestResponse createProjectRequest(
             Long clientId, ProjectRequestDto.CreateProjectRequest request) {
 
+        if (clientId == null) {
+            throw new RuntimeException("User ID not found in token. Please login again.");
+        }
+
         User client = userRepository.findById(clientId)
                 .orElseThrow(() -> new RuntimeException("Client not found"));
 
+        if (request.getServiceId() == null) {
+             throw new RuntimeException("Service ID is required");
+        }
+
         com.business.portfolio.model.Service service = serviceRepository.findById(request.getServiceId())
-                .orElseThrow(() -> new RuntimeException("Service not found"));
+                .orElseThrow(() -> new RuntimeException("Service not found with ID: " + request.getServiceId()));
 
         ProjectRequest projectRequest = new ProjectRequest();
         projectRequest.setClient(client);
@@ -45,6 +53,9 @@ public class ProjectRequestService {
     }
 
     public List<ProjectRequestDto.ProjectRequestResponse> getClientRequests(Long clientId) {
+        if (clientId == null) {
+            throw new RuntimeException("User ID not found in token. Please login again.");
+        }
         return projectRequestRepository.findByClientIdOrderByCreatedAtDesc(clientId)
                 .stream()
                 .map(this::convertToResponse)
