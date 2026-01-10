@@ -237,6 +237,9 @@ public class ProjectRequestService {
 
         // Map Client
         if (request.getClient() != null) {
+            System.out.println("DEBUG: Mapping client for request " + request.getId());
+            System.out.println("DEBUG: Client Name: " + request.getClient().getName());
+            
             UserDto clientDto = new UserDto();
             clientDto.setId(request.getClient().getId());
             clientDto.setName(request.getClient().getName());
@@ -244,6 +247,8 @@ public class ProjectRequestService {
             clientDto.setPhoneNumber(request.getClient().getPhoneNumber());
             clientDto.setCompany(request.getClient().getCompany());
             response.setClient(clientDto);
+        } else {
+            System.out.println("DEBUG: Client is NULL for request " + request.getId());
         }
 
         return response;
