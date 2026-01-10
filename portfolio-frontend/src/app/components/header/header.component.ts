@@ -2,7 +2,6 @@ import { Component, signal, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-header',
@@ -58,24 +57,16 @@ import { ThemeService } from '../../services/theme.service';
           }
         </ul>
 
-        <!-- Right side controls -->
-        <div class="nav-controls">
-          <!-- Theme Toggle Button -->
-          <button class="theme-toggle" (click)="toggleTheme()">
-            <i class="fas" [ngClass]="themeService.currentTheme() === 'light' ? 'fa-moon' : 'fa-sun'"></i>
-          </button>
-
-          <!-- Mobile Menu Button -->
-          <button
-            class="mobile-menu-btn"
-            (click)="toggleMenu()"
-            [class.active]="isMenuOpen()"
-          >
-            <span></span>
-            <span></span>
-            <span></span>
-          </button>
-        </div>
+        <!-- Mobile Menu Button -->
+        <button
+          class="mobile-menu-btn"
+          (click)="toggleMenu()"
+          [class.active]="isMenuOpen()"
+        >
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
       </nav>
     </header>
   `,
@@ -86,7 +77,6 @@ export class HeaderComponent implements OnInit {
   isMenuOpen = signal(false);
 
   authService = inject(AuthService);
-  themeService = inject(ThemeService);
 
   ngOnInit() {
     // Scroll effect for header
@@ -97,10 +87,6 @@ export class HeaderComponent implements OnInit {
 
   toggleMenu(): void {
     this.isMenuOpen.set(!this.isMenuOpen());
-  }
-
-  toggleTheme(): void {
-    this.themeService.toggleTheme();
   }
 
   logout(): void {
