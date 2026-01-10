@@ -1,5 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://your-domain.com/api',
+  apiUrl: 'https://portfolio-latest-hqe4.onrender.com',
   appName: 'Portfolio Website'
 };
