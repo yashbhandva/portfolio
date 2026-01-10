@@ -1,29 +1,31 @@
 .client-layout {
   display: flex;
   min-height: 100vh;
-  background: #f8f9fa;
+  background: var(--background-color);
 }
 
 .sidebar {
   width: 250px;
-  background: #2c3e50;
-  color: white;
+  background: #1f2937; /* Dark sidebar for both themes */
+  color: #f9fafb;
   position: fixed;
   height: 100vh;
   left: 0;
   top: 0;
   z-index: 1000;
   overflow-y: auto;
+  border-right: 1px solid var(--border-color);
 }
 
 .sidebar-header {
   padding: 1.5rem;
-  border-bottom: 1px solid #34495e;
+  border-bottom: 1px solid #374151;
 
   h2 {
     margin: 0;
     font-size: 1.25rem;
     font-weight: 600;
+    color: white;
   }
 }
 
@@ -38,7 +40,7 @@
   display: flex;
   align-items: center;
   padding: 0.75rem 1.5rem;
-  color: #bdc3c7;
+  color: #d1d5db;
   text-decoration: none;
   transition: all 0.3s ease;
   border: none;
@@ -55,23 +57,23 @@
   }
 
   &:hover {
-    background: #34495e;
+    background: #374151;
     color: white;
   }
 
   &.active {
-    background: #3498db;
+    background: var(--primary-color);
     color: white;
   }
 }
 
 .logout-btn {
   margin-top: auto;
-  border-top: 1px solid #34495e;
-  color: #e74c3c;
+  border-top: 1px solid #374151;
+  color: #ef4444;
 
   &:hover {
-    background: #c0392b;
+    background: #ef4444;
     color: white;
   }
 }
@@ -85,8 +87,8 @@
 
 .dashboard-header {
   height: 70px;
-  background: white;
-  border-bottom: 1px solid #e5e7eb;
+  background: var(--card-background);
+  border-bottom: 1px solid var(--border-color);
   padding: 0 2rem;
   display: flex;
   align-items: center;
@@ -104,7 +106,7 @@
 
 .welcome-message {
   font-weight: 500;
-  color: #374151;
+  color: var(--text-color);
 }
 
 .header-logout-btn {
@@ -113,7 +115,7 @@
   gap: 0.5rem;
   background: none;
   border: none;
-  color: #e74c3c;
+  color: #ef4444;
   cursor: pointer;
   font-size: 0.875rem;
   font-weight: 500;
@@ -122,7 +124,7 @@
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color: #fef2f2;
+    background-color: rgba(239, 68, 68, 0.1);
   }
 }
 
@@ -141,14 +143,14 @@
   background: none;
   border: none;
   font-size: 1.25rem;
-  color: #6b7280;
+  color: var(--secondary-text-color);
   cursor: pointer;
   position: relative;
   padding: 0.5rem;
   transition: color 0.3s ease;
 
   &:hover {
-    color: #2563eb;
+    color: var(--primary-color);
   }
 
   .badge {
@@ -174,17 +176,17 @@
   top: 100%;
   right: 0;
   width: 350px;
-  background: white;
+  background: var(--card-background);
   border-radius: 0.5rem;
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-  border: 1px solid #e5e7eb;
+  box-shadow: 0 10px 25px var(--shadow-color);
+  border: 1px solid var(--border-color);
   margin-top: 0.5rem;
   z-index: 1000;
   overflow: hidden;
 
   .dropdown-header {
     padding: 1rem;
-    border-bottom: 1px solid #e5e7eb;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -193,13 +195,13 @@
       margin: 0;
       font-size: 1rem;
       font-weight: 600;
-      color: #1f2937;
+      color: var(--text-color);
     }
 
     .mark-all-btn {
       background: none;
       border: none;
-      color: #2563eb;
+      color: var(--primary-color);
       font-size: 0.875rem;
       cursor: pointer;
 
@@ -216,38 +218,32 @@
 
   .notification-item {
     padding: 1rem;
-    border-bottom: 1px solid #f3f4f6;
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     gap: 1rem;
     cursor: pointer;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: #f9fafb;
+      background-color: var(--background-color);
     }
 
     &.unread {
-      background-color: #eff6ff;
+      background-color: rgba(59, 130, 246, 0.1);
 
       &:hover {
-        background-color: #e0e7ff;
+        background-color: rgba(59, 130, 246, 0.2);
       }
     }
 
     .notification-icon {
       width: 32px;
       height: 32px;
-      background: #e5e7eb;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: #4b5563;
       flex-shrink: 0;
-
-      i.fa-file-alt { color: #2563eb; background: #dbeafe; }
-      i.fa-sync { color: #d97706; background: #fef3c7; }
-      i.fa-credit-card { color: #059669; background: #d1fae5; }
     }
 
     .notification-content {
@@ -257,19 +253,19 @@
         margin: 0 0 0.25rem 0;
         font-size: 0.875rem;
         font-weight: 600;
-        color: #1f2937;
+        color: var(--text-color);
       }
 
       p {
         margin: 0 0 0.25rem 0;
         font-size: 0.875rem;
-        color: #6b7280;
+        color: var(--secondary-text-color);
         line-height: 1.4;
       }
 
       .time {
         font-size: 0.75rem;
-        color: #9ca3af;
+        color: var(--secondary-text-color);
       }
     }
   }
@@ -277,7 +273,7 @@
   .empty-notifications {
     padding: 2rem;
     text-align: center;
-    color: #6b7280;
+    color: var(--secondary-text-color);
   }
 }
 
@@ -308,7 +304,7 @@
   }
 
   .dashboard-header {
-    display: flex; /* Show header on mobile for notifications */
+    display: flex;
     padding: 0 1rem;
     justify-content: space-between;
   }
