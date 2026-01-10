@@ -323,6 +323,25 @@ export class AboutComponent implements OnInit, AfterViewInit {
         projectsCompleted: 25,
         successRate: 95
       },
+
+       {
+         name: 'UI/UX Design',
+         icon: 'fas fa-palette',
+         rating: 4.7,
+         description: 'User-centered design solutions that create intuitive and engaging digital experiences.',
+         projectsCompleted: 18,
+         successRate: 92
+       },
+
+       {
+         name: 'E-commerce Solutions',
+         icon: 'fas fa-shopping-cart',
+         rating: 4.9,
+         description: 'Full-featured online stores with secure payment integration and inventory management.',
+         projectsCompleted: 31,
+         successRate: 97
+       },
+
       {
         name: 'Backend Development',
         icon: 'fas fa-server',
@@ -356,20 +375,20 @@ export class AboutComponent implements OnInit, AfterViewInit {
         comment: 'Yash delivered an outstanding e-commerce platform that exceeded our expectations. His attention to detail and professionalism was remarkable.',
         rating: 5,
         author: {
-          name: 'Priya Mehta',
+          name: 'ghanshyam chaudhari',
           role: 'CEO',
           company: 'FashionHub',
-          photo: '/assets/images/clients/priya.jpg'
+          photo: '/assets/images/projects/ghanshyam.jpg'
         }
       },
       {
         comment: 'Working with Yash was a game-changer for our business. He understood our vision and delivered a web app that our users love.',
         rating: 5,
         author: {
-          name: 'Rohan Verma',
+          name: 'mikasa akraman',
           role: 'Founder',
           company: 'TechStart',
-          photo: '/assets/images/clients/rohan.jpg'
+          photo: '/assets/images/projects/mikasa akraman.jpg'
         }
       },
       {
@@ -379,7 +398,7 @@ export class AboutComponent implements OnInit, AfterViewInit {
           name: 'Anita Desai',
           role: 'Marketing Director',
           company: 'GlobalCorp',
-          photo: '/assets/images/clients/anita.jpg'
+          photo: '/assets/images/projects/hinata.jpg'
         }
       }
     ]);
