@@ -47,7 +47,12 @@ import { AuthService } from '../../../services/auth.service';
       <div class="projects-grid" *ngIf="!loading(); else loadingTemplate">
         <div class="project-card" *ngFor="let project of filteredProjects()">
           <div class="project-header">
-            <h3 class="project-title">{{ project.projectTitle }}</h3>
+            <div class="title-section">
+              <h3 class="project-title">{{ project.projectTitle }}</h3>
+              <span class="service-badge" *ngIf="project.service">
+                <i class="fas fa-tag"></i> {{ project.service.name }}
+              </span>
+            </div>
             <span class="project-status" [ngClass]="project.status">{{ project.status }}</span>
           </div>
 
@@ -106,22 +111,19 @@ export class ClientProjectsComponent implements OnInit {
   }
 
   loadProjects() {
-    const user = this.authService.currentUser();
-    if (user && user.id) {
-      this.clientService.getMyProjectRequests(user.id).subscribe({
-        next: (response) => {
-          if (response.status === 'success') {
-            this.projects.set(response.data);
-            this.filterProjects();
-          }
-          this.loading.set(false);
-        },
-        error: (error) => {
-          console.error('Error loading projects:', error);
-          this.loading.set(false);
+    this.clientService.getMyProjectRequests().subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.projects.set(response.data);
+          this.filterProjects();
         }
-      });
-    }
+        this.loading.set(false);
+      },
+      error: (error) => {
+        console.error('Error loading projects:', error);
+        this.loading.set(false);
+      }
+    });
   }
 
   filterProjects() {
