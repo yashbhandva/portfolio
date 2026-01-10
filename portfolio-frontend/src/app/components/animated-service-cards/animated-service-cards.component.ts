@@ -55,6 +55,28 @@ export class AnimatedServiceCardsComponent implements AfterViewInit {
       ]
     },
     {
+      icon: 'fas fa-database',
+      title: 'Cloud Solutions',
+      description: 'Scalable cloud infrastructure and database management for modern applications.',
+      features: [
+        'AWS/Azure/GCP Integration',
+        'Auto-scaling Systems',
+        'Data Migration',
+        '24/7 Monitoring'
+      ]
+    },
+    {
+      icon: 'fas fa-shield-alt',
+      title: 'Cybersecurity',
+      description: 'Comprehensive security solutions to protect your digital assets and data.',
+      features: [
+        'Vulnerability Assessment',
+        'Penetration Testing',
+        'Security Audits',
+        'Incident Response'
+        ]
+    },
+    {
       icon: 'fas fa-mobile-alt',
       title: 'Mobile Apps',
       description: 'Cross-platform mobile applications for iOS and Android devices.',
