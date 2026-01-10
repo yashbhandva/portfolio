@@ -16,13 +16,16 @@ export class ClientService {
     return this.http.get<ApiResponse<number>>(`${this.apiUrl}/client/messages/count?email=${email}`);
   }
 
+  getMyMessages(userId: number): Observable<ApiResponse<any[]>> {
+    // Note: We need to add this endpoint to ClientController or ContactController
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/client/messages`);
+  }
+
   getMyProjectRequests(): Observable<ApiResponse<any[]>> {
-    // No longer need to pass userId, it's derived from the JWT on the backend
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/client/project-requests`);
   }
 
   createProjectRequest(request: any): Observable<ApiResponse<any>> {
-    // No longer need to pass userId, it's derived from the JWT on the backend
     return this.http.post<ApiResponse<any>>(`${this.apiUrl}/client/project-requests`, request);
   }
 }
