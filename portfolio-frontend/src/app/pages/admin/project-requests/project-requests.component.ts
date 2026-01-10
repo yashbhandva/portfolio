@@ -1,12 +1,13 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
   selector: 'app-admin-project-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
     <div class="admin-requests">
       <div class="page-header">
@@ -33,7 +34,7 @@ import { AdminService } from '../../../services/admin.service';
               </tr>
             </thead>
             <tbody>
-              @for (request of requests(); track request.id) {
+              @for (request of paginatedRequests(); track request.id) {
                 <tr>
                   <td>
                     <div class="client-info">
@@ -93,6 +94,15 @@ import { AdminService } from '../../../services/admin.service';
             </tbody>
           </table>
         </div>
+
+        <!-- Pagination Controls -->
+        <app-pagination-controls
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize()"
+          [totalItems]="requests().length"
+          (pageChange)="onPageChange($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination-controls>
       }
 
       @if (!loading() && requests().length === 0) {
@@ -151,6 +161,17 @@ export class AdminProjectRequestsComponent implements OnInit {
   updating = signal<number | null>(null);
   requests = signal<any[]>([]);
 
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+
+  // Computed signal for paginated data
+  paginatedRequests = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    return this.requests().slice(startIndex, endIndex);
+  });
+
   // Message Modal
   showMessageModal = signal(false);
   selectedRequest = signal<any>(null);
@@ -176,6 +197,15 @@ export class AdminProjectRequestsComponent implements OnInit {
         this.loading.set(false);
       }
     });
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+    this.currentPage.set(1);
   }
 
   isPending(status: string): boolean {
