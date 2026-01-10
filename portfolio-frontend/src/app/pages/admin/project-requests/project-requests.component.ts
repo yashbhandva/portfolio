@@ -63,6 +63,15 @@ import { AdminService } from '../../../services/admin.service';
                   <td>{{ request.createdAt | date:'mediumDate' }}</td>
                   <td>
                     <div class="action-buttons">
+                      <!-- Check for PENDING status (case-insensitive) -->
+                      @if (isPending(request.status)) {
+                        <button
+                          class="btn-approve"
+                          (click)="approveRequest(request.id)"
+                          [disabled]="updating() === request.id">
+                          <i class="fas fa-check"></i> Approve
+                        </button>
+                      }
                       <select
                         [ngModel]="request.status"
                         (ngModelChange)="updateStatus(request.id, $event)"
@@ -110,6 +119,7 @@ export class AdminProjectRequestsComponent implements OnInit {
     this.adminService.getAllProjectRequests().subscribe({
       next: (response) => {
         if (response.status === 'success') {
+          console.log('Loaded requests:', response.data); // Debug log
           this.requests.set(response.data);
         }
         this.loading.set(false);
@@ -121,20 +131,37 @@ export class AdminProjectRequestsComponent implements OnInit {
     });
   }
 
+  isPending(status: string): boolean {
+    return status === 'PENDING' || status === 'Pending';
+  }
+
   updateStatus(id: number, newStatus: string) {
     this.updating.set(id);
     this.adminService.updateProjectRequestStatus(id, newStatus).subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          // Update local state
-          this.requests.update(reqs =>
-            reqs.map(r => r.id === id ? { ...r, status: newStatus } : r)
-          );
+          this.loadRequests(); // Reload to reflect changes
         }
         this.updating.set(null);
       },
       error: (error) => {
         console.error('Error updating status:', error);
+        this.updating.set(null);
+      }
+    });
+  }
+
+  approveRequest(id: number) {
+    this.updating.set(id);
+    this.adminService.approveProjectRequest(id).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.loadRequests(); // Reload to show status change
+        }
+        this.updating.set(null);
+      },
+      error: (error) => {
+        console.error('Error approving request:', error);
         this.updating.set(null);
       }
     });
