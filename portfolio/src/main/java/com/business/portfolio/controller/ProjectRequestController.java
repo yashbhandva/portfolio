@@ -21,7 +21,7 @@ public class ProjectRequestController {
     // 👤 CLIENT ENDPOINTS
     @PostMapping("/client/project-requests")
     public ResponseEntity<ApiResponse<ProjectRequestDto.ProjectRequestResponse>> createProjectRequest(
-            @RequestHeader("userId") Long clientId,
+            @RequestAttribute("userId") Long clientId, // <-- FIXED: Use RequestAttribute
             @Valid @RequestBody ProjectRequestDto.CreateProjectRequest request) {
         try {
             ProjectRequestDto.ProjectRequestResponse projectRequest = projectRequestService.createProjectRequest(clientId, request);
@@ -34,7 +34,7 @@ public class ProjectRequestController {
 
     @GetMapping("/client/project-requests")
     public ResponseEntity<ApiResponse<List<ProjectRequestDto.ProjectRequestResponse>>> getClientRequests(
-            @RequestHeader("userId") Long clientId) {
+            @RequestAttribute("userId") Long clientId) { // <-- FIXED: Use RequestAttribute
         try {
             List<ProjectRequestDto.ProjectRequestResponse> requests = projectRequestService.getClientRequests(clientId);
             return ResponseEntity.ok(ApiResponse.success("Project requests retrieved successfully", requests));
