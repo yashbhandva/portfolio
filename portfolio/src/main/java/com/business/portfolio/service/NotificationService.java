@@ -37,6 +37,21 @@ public class NotificationService {
         }
     }
 
+    // New method: Send to specific user
+    public void sendToUser(Long userId, String title, String message) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+        createNotification(user, title, message, Notification.NotificationType.SYSTEM, null);
+    }
+
+    // New method: Send to all users
+    public void broadcastToAll(String title, String message) {
+        List<User> allUsers = userRepository.findAll();
+        for (User user : allUsers) {
+            createNotification(user, title, message, Notification.NotificationType.SYSTEM, null);
+        }
+    }
+
     public List<NotificationDto> getUserNotifications(Long userId) {
         return notificationRepository.findByRecipientIdOrderByCreatedAtDesc(userId)
                 .stream()
