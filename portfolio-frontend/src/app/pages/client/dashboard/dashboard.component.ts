@@ -64,7 +64,7 @@ import { ClientService } from '../../../services/client.service';
       <div class="quick-actions">
         <h2>Quick Actions</h2>
         <div class="actions-grid">
-          <a routerLink="/contact" class="action-card">
+          <a routerLink="/start-project" class="action-card">
             <i class="fas fa-plus"></i>
             <span>New Project Request</span>
           </a>
