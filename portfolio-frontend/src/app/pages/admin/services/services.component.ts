@@ -1,81 +1,23 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { AdminService } from '../../../services/admin.service';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
   selector: 'app-admin-services',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
-    <div class="admin-services">
+    <div class="services-container">
       <div class="page-header">
         <h1>Services Management</h1>
-        <p>Manage your portfolio services</p>
         <button class="btn btn-primary" (click)="showAddForm()">
           <i class="fas fa-plus"></i>
           Add New Service
         </button>
       </div>
 
-      @if (loading()) {
-        <div class="loading">Loading services...</div>
-      } @else {
-        <div class="table-container">
-          <table class="services-table">
-            <thead>
-              <tr>
-                <th>Service Name</th>
-                <th>Category</th>
-                <th>Price</th>
-                <th>Delivery</th>
-                <th>Status</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              @for (service of services(); track service.id) {
-                <tr>
-                  <td>
-                    <div class="service-info">
-                      <div class="service-name">{{ service.name }}</div>
-                      <div class="service-description">{{ service.description }}</div>
-                    </div>
-                  </td>
-                  <td><span class="category-badge">{{ service.category }}</span></td>
-                  <td class="price-cell">\${{ service.startingPrice }}</td>
-                  <td>{{ service.deliveryDays }} days</td>
-                  <td>
-                    <span class="status-badge" [class.active]="service.active">
-                      {{ service.active ? 'Active' : 'Inactive' }}
-                    </span>
-                  </td>
-                  <td>
-                    <div class="action-buttons">
-                      <button class="btn-icon btn-edit" (click)="editService(service)" title="Edit">
-                        <i class="fas fa-edit"></i>
-                      </button>
-                      <button class="btn-icon btn-delete" (click)="deleteService(service.id)" title="Delete">
-                        <i class="fas fa-trash"></i>
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              }
-            </tbody>
-          </table>
-        </div>
-      }
-
-      @if (!loading() && services().length === 0) {
-        <div class="empty-state">
-          <i class="fas fa-cogs"></i>
-          <h3>No services found</h3>
-          <p>Start by adding your first service</p>
-        </div>
-      }
-
-      <!-- Add/Edit Service Form -->
       @if (showForm()) {
         <div class="form-modal">
           <div class="form-container">
@@ -97,28 +39,28 @@ import { AdminService } from '../../../services/admin.service';
                 </div>
               </div>
               <div class="form-group">
-                <label>Description *</label>
-                <textarea [(ngModel)]="serviceData.description" name="description" required class="form-textarea" rows="3"></textarea>
+                <label>Description</label>
+                <textarea [(ngModel)]="serviceData.description" name="description" class="form-textarea" rows="3"></textarea>
               </div>
               <div class="form-row">
                 <div class="form-group">
-                  <label>Starting Price *</label>
-                  <input type="number" [(ngModel)]="serviceData.startingPrice" name="startingPrice" required class="form-input" step="0.01">
+                  <label>Starting Price</label>
+                  <input type="number" [(ngModel)]="serviceData.startingPrice" name="startingPrice" class="form-input">
                 </div>
                 <div class="form-group">
-                  <label>Delivery Days *</label>
-                  <input type="number" [(ngModel)]="serviceData.deliveryDays" name="deliveryDays" required class="form-input">
+                  <label>Delivery Days</label>
+                  <input type="number" [(ngModel)]="serviceData.deliveryDays" name="deliveryDays" class="form-input">
                 </div>
               </div>
               <div class="form-group">
-                <label>Features</label>
-                <textarea [(ngModel)]="serviceData.features" name="features" class="form-textarea" rows="2" placeholder="e.g., Responsive Design, SEO Optimized"></textarea>
+                <label>Features (comma-separated)</label>
+                <input type="text" [(ngModel)]="serviceData.features" name="features" class="form-input">
               </div>
               <div class="form-group">
                 <label class="checkbox-label">
                   <input type="checkbox" [(ngModel)]="serviceData.active" name="active">
                   <span class="checkmark"></span>
-                  Active Service
+                  Active
                 </label>
               </div>
               <div class="form-actions">
@@ -137,23 +79,85 @@ import { AdminService } from '../../../services/admin.service';
           </div>
         </div>
       }
+
+      @if (loading()) {
+        <div class="loading">Loading services...</div>
+      } @else {
+        <div class="table-container">
+          <table class="services-table">
+            <thead>
+              <tr>
+                <th>Service</th>
+                <th>Category</th>
+                <th>Price</th>
+                <th>Delivery</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              @for (service of paginatedServices(); track service.id) {
+                <tr>
+                  <td>{{ service.name }}</td>
+                  <td>{{ service.category }}</td>
+                  <td>{{ service.startingPrice | currency }}</td>
+                  <td>{{ service.deliveryDays }} days</td>
+                  <td>
+                    <span class="status-badge" [class]="service.active ? 'active' : 'inactive'">
+                      {{ service.active ? 'Active' : 'Inactive' }}
+                    </span>
+                  </td>
+                  <td>
+                    <div class="action-buttons">
+                      <button class="btn-icon btn-edit" (click)="editService(service)" title="Edit">
+                        <i class="fas fa-edit"></i>
+                      </button>
+                      <button class="btn-icon btn-delete" (click)="deleteService(service.id)" title="Delete">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+
+        <app-pagination-controls
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize()"
+          [totalItems]="services().length"
+          (pageChange)="onPageChange($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination-controls>
+      }
     </div>
   `,
   styleUrls: ['./services.component.scss']
 })
 export class AdminServicesComponent implements OnInit {
   private adminService = inject(AdminService);
-  
+
   loading = signal(false);
   saving = signal(false);
   showForm = signal(false);
   editingService = signal<any>(null);
   services = signal<any[]>([]);
 
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+
+  paginatedServices = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    return this.services().slice(startIndex, endIndex);
+  });
+
   serviceData = {
     name: '',
-    description: '',
     category: '',
+    description: '',
     startingPrice: 0,
     deliveryDays: 0,
     features: '',
@@ -180,6 +184,15 @@ export class AdminServicesComponent implements OnInit {
     });
   }
 
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+    this.currentPage.set(1);
+  }
+
   showAddForm() {
     this.resetForm();
     this.editingService.set(null);
@@ -200,8 +213,8 @@ export class AdminServicesComponent implements OnInit {
   resetForm() {
     this.serviceData = {
       name: '',
-      description: '',
       category: '',
+      description: '',
       startingPrice: 0,
       deliveryDays: 0,
       features: '',
