@@ -1,12 +1,13 @@
-import { Component, OnInit, signal, inject } from '@angular/core';
+import { Component, OnInit, signal, inject, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ClientService } from '../../../services/client.service';
 import { AuthService } from '../../../services/auth.service';
+import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
   selector: 'app-client-messages',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PaginationControlsComponent],
   template: `
     <div class="messages-container">
       <div class="page-header">
@@ -18,7 +19,7 @@ import { AuthService } from '../../../services/auth.service';
         <div class="loading">Loading messages...</div>
       } @else {
         <div class="messages-list">
-          @for (message of messages(); track message.id) {
+          @for (message of paginatedMessages(); track message.id) {
             <div class="message-card">
               <div class="message-header">
                 <div class="subject-section">
@@ -47,6 +48,15 @@ import { AuthService } from '../../../services/auth.service';
             </div>
           }
         </div>
+
+        <app-pagination-controls
+          *ngIf="!loading()"
+          [currentPage]="currentPage()"
+          [pageSize]="pageSize()"
+          [totalItems]="messages().length"
+          (pageChange)="onPageChange($event)"
+          (pageSizeChange)="onPageSizeChange($event)">
+        </app-pagination-controls>
       }
 
       @if (!loading() && messages().length === 0) {
@@ -66,6 +76,16 @@ export class ClientMessagesComponent implements OnInit {
 
   messages = signal<any[]>([]);
   loading = signal(false);
+
+  // Pagination
+  currentPage = signal(1);
+  pageSize = signal(10);
+
+  paginatedMessages = computed(() => {
+    const startIndex = (this.currentPage() - 1) * this.pageSize();
+    const endIndex = startIndex + this.pageSize();
+    return this.messages().slice(startIndex, endIndex);
+  });
 
   ngOnInit() {
     this.loadMessages();
@@ -88,5 +108,14 @@ export class ClientMessagesComponent implements OnInit {
         }
       });
     }
+  }
+
+  onPageChange(page: number) {
+    this.currentPage.set(page);
+  }
+
+  onPageSizeChange(size: number) {
+    this.pageSize.set(size);
+    this.currentPage.set(1);
   }
 }
