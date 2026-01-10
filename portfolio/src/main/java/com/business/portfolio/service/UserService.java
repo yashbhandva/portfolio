@@ -51,6 +51,27 @@ public class UserService {
         return convertToDto(updatedUser);
     }
 
+    // Admin method to update user (including role and status)
+    public User adminUpdateUser(Long id, User userDetails) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User not found"));
+
+        if (userDetails.getName() != null) user.setName(userDetails.getName());
+        if (userDetails.getEmail() != null) user.setEmail(userDetails.getEmail());
+        if (userDetails.getPhoneNumber() != null) user.setPhoneNumber(userDetails.getPhoneNumber());
+        if (userDetails.getRole() != null) user.setRole(userDetails.getRole());
+        user.setEnabled(userDetails.isEnabled());
+
+        return userRepository.save(user);
+    }
+
+    public void deleteUser(Long id) {
+        if (!userRepository.existsById(id)) {
+            throw new RuntimeException("User not found");
+        }
+        userRepository.deleteById(id);
+    }
+
     public void changePassword(Long userId, UserDto.ChangePasswordRequest request) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
