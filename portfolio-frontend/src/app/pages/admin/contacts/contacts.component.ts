@@ -115,11 +115,79 @@ import { AdminService } from '../../../services/admin.service';
           <p>No contact messages match your current filters</p>
         </div>
       }
+
+      <!-- View/Reply Modal -->
+      @if (showModal()) {
+        <div class="modal-overlay" (click)="closeModal()">
+          <div class="modal-content" (click)="$event.stopPropagation()">
+            <div class="modal-header">
+              <h3>{{ isReplying() ? 'Reply to Message' : 'Message Details' }}</h3>
+              <button class="btn-close" (click)="closeModal()">
+                <i class="fas fa-times"></i>
+              </button>
+            </div>
+            <div class="modal-body">
+              @if (selectedContact()) {
+                <div class="message-details">
+                  <div class="detail-row">
+                    <label>From:</label>
+                    <span>{{ selectedContact().name }} ({{ selectedContact().email }})</span>
+                  </div>
+                  <div class="detail-row">
+                    <label>Subject:</label>
+                    <span>{{ selectedContact().subject }}</span>
+                  </div>
+                  <div class="detail-row">
+                    <label>Date:</label>
+                    <span>{{ selectedContact().createdAt | date:'medium' }}</span>
+                  </div>
+                  <div class="detail-row message-content">
+                    <label>Message:</label>
+                    <p>{{ selectedContact().message }}</p>
+                  </div>
+                </div>
+
+                @if (isReplying()) {
+                  <div class="reply-form">
+                    <div class="form-group">
+                      <label>Your Reply:</label>
+                      <textarea [(ngModel)]="replyMessage" class="form-textarea" rows="5" placeholder="Type your reply here..."></textarea>
+                    </div>
+                    <div class="form-actions">
+                      <button class="btn btn-outline" (click)="isReplying.set(false)">Cancel</button>
+                      <button class="btn btn-primary" (click)="sendReply()" [disabled]="sending() || !replyMessage">
+                        @if (sending()) {
+                          <i class="fas fa-spinner fa-spin"></i> Sending...
+                        } @else {
+                          <i class="fas fa-paper-plane"></i> Send Reply
+                        }
+                      </button>
+                    </div>
+                  </div>
+                } @else {
+                  <div class="modal-actions">
+                    <button class="btn btn-primary" (click)="isReplying.set(true)">
+                      <i class="fas fa-reply"></i> Reply
+                    </button>
+                    @if (selectedContact().status !== 'RESOLVED') {
+                      <button class="btn btn-success" (click)="markResolved(selectedContact().id)">
+                        <i class="fas fa-check"></i> Mark Resolved
+                      </button>
+                    }
+                  </div>
+                }
+              }
+            </div>
+          </div>
+        </div>
+      }
     </div>
   `,
   styleUrls: ['./contacts.component.scss']
 })
 export class ContactsComponent implements OnInit {
+  private adminService = inject(AdminService);
+
   allContacts = signal<any[]>([]);
   filteredContacts = signal<any[]>([]);
   stats = signal({
@@ -130,29 +198,31 @@ export class ContactsComponent implements OnInit {
   searchTerm = '';
   selectedStatus = '';
 
+  // Modal state
+  showModal = signal(false);
+  isReplying = signal(false);
+  selectedContact = signal<any>(null);
+  replyMessage = '';
+  sending = signal(false);
+
   ngOnInit() {
     this.loadContacts();
   }
-
-  private adminService = inject(AdminService);
 
   private loadContacts(): void {
     this.adminService.getAllContacts().subscribe({
       next: (response) => {
         if (response.status === 'success' && response.data) {
           this.allContacts.set(response.data);
-          this.filteredContacts.set(response.data);
+          this.filterContacts();
           this.stats.set({
             total: response.data.length,
-            pending: response.data.filter(c => c.status === 'NEW' || c.status === 'PENDING').length
+            pending: response.data.filter(c => c.status === 'NEW' || c.status === 'IN_PROGRESS').length
           });
         }
       },
       error: (error) => {
         console.error('Error loading contacts:', error);
-        console.error('Error details:', error.error);
-        console.error('Status:', error.status);
-        // Fallback to empty array
         this.allContacts.set([]);
         this.filteredContacts.set([]);
       }
@@ -180,14 +250,69 @@ export class ContactsComponent implements OnInit {
   }
 
   viewContact(contactId: number): void {
-    console.log('View contact:', contactId);
+    const contact = this.allContacts().find(c => c.id === contactId);
+    if (contact) {
+      this.selectedContact.set(contact);
+      this.isReplying.set(false);
+      this.showModal.set(true);
+
+      // If status is NEW, mark as IN_PROGRESS
+      if (contact.status === 'NEW') {
+        this.updateStatus(contactId, 'IN_PROGRESS');
+      }
+    }
   }
 
   replyContact(contactId: number): void {
-    console.log('Reply to contact:', contactId);
+    const contact = this.allContacts().find(c => c.id === contactId);
+    if (contact) {
+      this.selectedContact.set(contact);
+      this.isReplying.set(true);
+      this.replyMessage = '';
+      this.showModal.set(true);
+    }
   }
 
   markResolved(contactId: number): void {
-    console.log('Mark resolved:', contactId);
+    this.updateStatus(contactId, 'RESOLVED');
+    this.closeModal();
+  }
+
+  updateStatus(contactId: number, status: string): void {
+    this.adminService.updateContactStatus(contactId, status).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.loadContacts();
+        }
+      },
+      error: (error) => console.error('Error updating status:', error)
+    });
+  }
+
+  sendReply(): void {
+    if (!this.replyMessage || !this.selectedContact()) return;
+
+    this.sending.set(true);
+    const contactId = this.selectedContact().id;
+
+    this.adminService.replyToContact(contactId, this.replyMessage).subscribe({
+      next: (response) => {
+        if (response.status === 'success') {
+          this.sending.set(false);
+          this.closeModal();
+          this.loadContacts(); // Will show as RESOLVED
+        }
+      },
+      error: (error) => {
+        console.error('Error sending reply:', error);
+        this.sending.set(false);
+      }
+    });
+  }
+
+  closeModal(): void {
+    this.showModal.set(false);
+    this.selectedContact.set(null);
+    this.replyMessage = '';
   }
 }
