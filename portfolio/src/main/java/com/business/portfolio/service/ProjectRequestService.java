@@ -1,6 +1,7 @@
 package com.business.portfolio.service;
 
 import com.business.portfolio.dto.ProjectRequestDto;
+import com.business.portfolio.dto.ServiceDto;
 import com.business.portfolio.model.ProjectRequest;
 import com.business.portfolio.model.User;
 import com.business.portfolio.repository.ProjectRequestRepository;
@@ -127,6 +128,22 @@ public class ProjectRequestService {
         response.setPriority(request.getPriority());
         response.setCreatedAt(request.getCreatedAt());
         response.setUpdatedAt(request.getUpdatedAt());
+
+        // Map Service
+        if (request.getService() != null) {
+            ServiceDto.ServiceResponse serviceResponse = new ServiceDto.ServiceResponse();
+            serviceResponse.setId(request.getService().getId());
+            serviceResponse.setName(request.getService().getName());
+            serviceResponse.setCategory(request.getService().getCategory());
+            serviceResponse.setDescription(request.getService().getDescription());
+            serviceResponse.setStartingPrice(request.getService().getStartingPrice());
+            serviceResponse.setDeliveryDays(request.getService().getDeliveryDays());
+            serviceResponse.setFeatures(request.getService().getFeatures());
+            serviceResponse.setActive(request.getService().isActive());
+            serviceResponse.setDisplayOrder(request.getService().getDisplayOrder());
+            response.setService(serviceResponse);
+        }
+
         return response;
     }
 }
