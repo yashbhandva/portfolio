@@ -3,6 +3,7 @@ package com.business.portfolio.service;
 import com.business.portfolio.dto.ProjectDto;
 import com.business.portfolio.dto.ProjectRequestDto;
 import com.business.portfolio.dto.ServiceDto;
+import com.business.portfolio.dto.UserDto;
 import com.business.portfolio.model.Notification;
 import com.business.portfolio.model.Project;
 import com.business.portfolio.model.ProjectRequest;
@@ -86,7 +87,7 @@ public class ProjectRequestService {
         project.setTechnologies("Pending");
         project.setImageUrl("https://via.placeholder.com/300");
         project.setFeatured(false);
-
+        
         Project savedProject = projectRepository.save(project);
 
         // Update request status
@@ -114,7 +115,7 @@ public class ProjectRequestService {
         response.setFeatured(savedProject.isFeatured());
         response.setCreatedAt(savedProject.getCreatedAt());
         response.setUpdatedAt(savedProject.getUpdatedAt());
-
+        
         return response;
     }
 
@@ -232,6 +233,17 @@ public class ProjectRequestService {
             serviceResponse.setActive(request.getService().isActive());
             serviceResponse.setDisplayOrder(request.getService().getDisplayOrder());
             response.setService(serviceResponse);
+        }
+
+        // Map Client
+        if (request.getClient() != null) {
+            UserDto clientDto = new UserDto();
+            clientDto.setId(request.getClient().getId());
+            clientDto.setName(request.getClient().getName());
+            clientDto.setEmail(request.getClient().getEmail());
+            clientDto.setPhoneNumber(request.getClient().getPhoneNumber());
+            clientDto.setCompany(request.getClient().getCompany());
+            response.setClient(clientDto);
         }
 
         return response;
