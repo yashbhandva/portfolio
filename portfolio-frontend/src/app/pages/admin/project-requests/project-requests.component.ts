@@ -27,7 +27,7 @@ import { AdminService } from '../../../services/admin.service';
                 <th>Project</th>
                 <th>Service</th>
                 <th>Budget</th>
-                <th>Status</th>
+                <th>Status (Debug)</th> <!-- Added Debug Header -->
                 <th>Date</th>
                 <th>Actions</th>
               </tr>
@@ -56,14 +56,16 @@ import { AdminService } from '../../../services/admin.service';
                   </td>
                   <td>{{ request.budget | currency }}</td>
                   <td>
+                    <!-- DEBUG: Printing the raw status value -->
                     <span class="status-badge" [ngClass]="request.status">
                       {{ request.status }}
                     </span>
+                    <small style="display:block; color: #999;">Raw: "{{ request.status }}"</small>
                   </td>
                   <td>{{ request.createdAt | date:'mediumDate' }}</td>
                   <td>
                     <div class="action-buttons">
-                      <!-- Check for PENDING status (case-insensitive) -->
+                      <!-- Simplified check and added debug log -->
                       @if (isPending(request.status)) {
                         <button
                           class="btn-approve"
@@ -119,7 +121,7 @@ export class AdminProjectRequestsComponent implements OnInit {
     this.adminService.getAllProjectRequests().subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          console.log('Loaded requests:', response.data); // Debug log
+          console.log('Loaded requests:', response.data);
           this.requests.set(response.data);
         }
         this.loading.set(false);
@@ -132,7 +134,9 @@ export class AdminProjectRequestsComponent implements OnInit {
   }
 
   isPending(status: string): boolean {
-    return status === 'PENDING' || status === 'Pending';
+    console.log('Checking status:', status); // Debug log
+    if (!status) return false;
+    return status.toUpperCase() === 'PENDING';
   }
 
   updateStatus(id: number, newStatus: string) {
@@ -140,7 +144,7 @@ export class AdminProjectRequestsComponent implements OnInit {
     this.adminService.updateProjectRequestStatus(id, newStatus).subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          this.loadRequests(); // Reload to reflect changes
+          this.loadRequests();
         }
         this.updating.set(null);
       },
@@ -156,7 +160,7 @@ export class AdminProjectRequestsComponent implements OnInit {
     this.adminService.approveProjectRequest(id).subscribe({
       next: (response) => {
         if (response.status === 'success') {
-          this.loadRequests(); // Reload to show status change
+          this.loadRequests();
         }
         this.updating.set(null);
       },
