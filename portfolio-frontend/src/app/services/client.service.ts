@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/api-response.model';
@@ -16,13 +16,13 @@ export class ClientService {
     return this.http.get<ApiResponse<number>>(`${this.apiUrl}/client/messages/count?email=${email}`);
   }
 
-  getMyProjectRequests(clientId: number): Observable<ApiResponse<any[]>> {
-    const headers = new HttpHeaders().set('userId', clientId.toString());
-    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/client/project-requests`, { headers });
+  getMyProjectRequests(): Observable<ApiResponse<any[]>> {
+    // No longer need to pass userId, it's derived from the JWT on the backend
+    return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/client/project-requests`);
   }
 
-  createProjectRequest(clientId: number, request: any): Observable<ApiResponse<any>> {
-    const headers = new HttpHeaders().set('userId', clientId.toString());
-    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/client/project-requests`, request, { headers });
+  createProjectRequest(request: any): Observable<ApiResponse<any>> {
+    // No longer need to pass userId, it's derived from the JWT on the backend
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/client/project-requests`, request);
   }
 }
