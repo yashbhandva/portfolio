@@ -45,6 +45,14 @@ export class AdminService {
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/admin/contacts`);
   }
 
+  updateContactStatus(id: number, status: string): Observable<ApiResponse<any>> {
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/admin/contacts/${id}/status`, { status });
+  }
+
+  replyToContact(id: number, message: string): Observable<ApiResponse<any>> {
+    return this.http.post<ApiResponse<any>>(`${this.apiUrl}/admin/contacts/${id}/reply`, { message });
+  }
+
   // Users
   getAllUsers(): Observable<ApiResponse<any[]>> {
     return this.http.get<ApiResponse<any[]>>(`${this.apiUrl}/admin/users`);
@@ -81,11 +89,11 @@ export class AdminService {
 
   // User Management
   updateUser(id: number, userData: any): Observable<ApiResponse<any>> {
-    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/users/${id}`, userData);
+    return this.http.put<ApiResponse<any>>(`${this.apiUrl}/admin/users/${id}`, userData);
   }
 
   deleteUser(id: number): Observable<ApiResponse<any>> {
-    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/users/${id}`);
+    return this.http.delete<ApiResponse<any>>(`${this.apiUrl}/admin/users/${id}`);
   }
 
   // Notifications
