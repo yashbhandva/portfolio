@@ -13,21 +13,21 @@ if (fs.existsSync(envPath)) {
 const targetPath = path.resolve(__dirname, '../src/environments/environment.ts');
 const targetProdPath = path.resolve(__dirname, '../src/environments/environment.prod.ts');
 
-// Define environment content
-const apiUrl = process.env.API_URL || "/api"; // Default to relative path for proxy
-const production = process.env.PRODUCTION === 'true' || false;
-
+// --- Development Environment ---
 const envConfigFile = `export const environment = {
-  production: ${production},
-  apiUrl: '${apiUrl}'
+  production: ${process.env.PRODUCTION === 'true' || false},
+  apiUrl: '${process.env.API_URL || "/api"}',
+  cacheTimeout: ${process.env.CACHE_TIMEOUT || 300000}, // 5 minutes
+  enablePerformanceLogging: ${process.env.ENABLE_PERFORMANCE_LOGGING === 'true' || true}
 };
 `;
 
-// For production, we use the live URL.
-const prodApiUrl = "https://portfolio-latest-hqe4.onrender.com/api";
+// --- Production Environment ---
 const envProdConfigFile = `export const environment = {
   production: true,
-  apiUrl: '${prodApiUrl}'
+  apiUrl: '${process.env.API_URL || "https://portfolio-latest-hqe4.onrender.com/api"}',
+  cacheTimeout: ${process.env.CACHE_TIMEOUT || 600000}, // 10 minutes
+  enablePerformanceLogging: ${process.env.ENABLE_PERFORMANCE_LOGGING === 'true' || false}
 };
 `;
 
