@@ -25,7 +25,7 @@ import { GsapService } from '../../services/gsap.service';
             Check out some of our recent work that we're proud of
           </p>
         </div>
-        
+
         <div class="projects-grid">
           <div class="project-card" *ngFor="let project of featuredProjects; let i = index">
             <div class="project-image">
@@ -43,11 +43,11 @@ import { GsapService } from '../../services/gsap.service';
                 </div>
               </div>
             </div>
-            
+
             <div class="project-content">
               <h3 class="project-title">{{ project.title }}</h3>
               <p class="project-description">{{ project.description }}</p>
-              
+
               <div class="project-technologies">
                 <span class="tech-tag" *ngFor="let tech of project.technologies">
                   {{ tech }}
@@ -56,7 +56,7 @@ import { GsapService } from '../../services/gsap.service';
             </div>
           </div>
         </div>
-        
+
         <div class="section-cta">
           <a routerLink="/portfolio" class="btn btn-primary btn-large">
             View All Projects
@@ -126,7 +126,7 @@ export class HomeComponent implements AfterViewInit {
   ];
 
   stats = [
-    { icon: 'fas fa-project-diagram', value: 50, label: 'Projects Completed' },
+    { icon: 'fas fa-project-diagram', value: "10", label: 'Projects Completed' },
     { icon: 'fas fa-users', value: 25, label: 'Happy Clients' },
     { icon: 'fas fa-code-branch', value: 3, label: 'Team Members' },
     { icon: 'fas fa-award', value: 5, label: 'Years Experience' }
