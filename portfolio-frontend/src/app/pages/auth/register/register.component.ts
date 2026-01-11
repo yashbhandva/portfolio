@@ -166,9 +166,9 @@ import { RegisterRequest } from '../../../models/auth.model';
                 class="checkbox-input">
               <span class="checkmark"></span>
               I agree to the 
-              <a href="#" class="terms-link">Terms of Service</a> 
+              <a routerLink="/terms-of-service" target="_blank" class="terms-link">Terms of Service</a>
               and 
-              <a href="#" class="terms-link">Privacy Policy</a>
+              <a routerLink="/privacy-policy" target="_blank" class="terms-link">Privacy Policy</a>
             </label>
           </div>
 
