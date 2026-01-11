@@ -88,7 +88,7 @@ One passion, one vision - creating amazing digital experiences
                   <i class="fas fa-map-marker-alt"></i>
                   <div>
                     <strong>Location</strong>
-                    <p>City, Country</p>
+                    <p>Moda(Kutch) ,Gujarat</p>
                   </div>
                 </div>
                 <div class="info-item">
@@ -207,7 +207,7 @@ One passion, one vision - creating amazing digital experiences
                 <i class="fas fa-map-marker-alt"></i>
                 <div>
                   <strong>Address</strong>
-                  <p>123 Tech Street, Innovation District<br>City, State 12345</p>
+                  <p>Moda(Kutch) ,Gujarat <br> 370155</p>
                 </div>
               </div>
 
@@ -215,7 +215,7 @@ One passion, one vision - creating amazing digital experiences
                 <i class="fas fa-phone"></i>
                 <div>
                   <strong>Phone</strong>
-                  <p>+1 (555) 123-4567</p>
+                  <p>+91 95125 70683</p>
                 </div>
               </div>
 
@@ -223,7 +223,7 @@ One passion, one vision - creating amazing digital experiences
                 <i class="fas fa-envelope"></i>
                 <div>
                   <strong>Email</strong>
-                  <p>hello&#64;myportfolio.com</p>
+                  <p>yashbhandva01&#64;gmail.com</p>
                 </div>
               </div>
 
