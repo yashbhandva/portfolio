@@ -29,7 +29,7 @@ import { NotificationService } from '../../services/notification.service';
           </a>
           <a routerLink="/admin/projects" routerLinkActive="active" class="nav-item">
             <i class="fas fa-project-diagram"></i>
-            Portfolio
+            Projects
           </a>
           <a routerLink="/admin/services" routerLinkActive="active" class="nav-item">
             <i class="fas fa-cogs"></i>
