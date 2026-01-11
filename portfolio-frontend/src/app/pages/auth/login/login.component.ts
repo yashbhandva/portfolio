@@ -103,26 +103,6 @@ import { LoginRequest } from '../../../models/auth.model';
         </form>
       </div>
 
-      <div class="demo-credentials">
-        <div class="demo-header" (click)="toggleDemoCredentials()">
-          <h3>Demo Credentials</h3>
-          <i class="fas fa-chevron-down" [class.rotated]="showDemoCredentials()"></i>
-        </div>
-        @if (showDemoCredentials()) {
-          <div class="demo-content">
-            <div class="demo-account">
-              <strong>Admin Account:</strong>
-              <p>Email: admin&#64;demo.com</p>
-              <p>Password: admin123</p>
-            </div>
-            <div class="demo-account">
-              <strong>Client Account:</strong>
-              <p>Email: client&#64;demo.com</p>
-              <p>Password: client123</p>
-            </div>
-          </div>
-        }
-      </div>
     </div>
   `,
   styleUrls: ['./login.component.scss']
