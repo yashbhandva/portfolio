@@ -27,6 +27,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent)
   },
   {
+    path: 'privacy-policy',
+    loadComponent: () => import('./pages/Policy-service/privacy-policy.component').then(m => m.PrivacyPolicyComponent)
+  },
+  {
+    path: 'terms-of-service',
+    loadComponent: () => import('./pages/Policy-service/terms-of-service.component').then(m => m.TermsOfServiceComponent)
+  },
+  {
     path: 'login',
     loadComponent: () => import('./pages/auth/login/login.component').then(m => m.LoginComponent)
   },
