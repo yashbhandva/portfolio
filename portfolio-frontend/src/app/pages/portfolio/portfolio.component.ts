@@ -479,7 +479,7 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
         title: 'E-Commerce Platform',
         description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
         category: 'Web Development',
-        imageUrl: '/assets/images/projects/ecommerce.jpg',
+        imageUrl: '/assets/images/projects/E-Commerce Platform.jpg',
         projectUrl: 'https://demo-ecommerce.com',
         featured: true,
         technologies: ['Angular', 'Spring Boot', 'MySQL', 'Stripe', 'AWS']
@@ -489,7 +489,7 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
         title: 'Task Management App',
         description: 'Productivity app for team collaboration and task tracking with real-time updates.',
         category: 'Mobile Development',
-        imageUrl: '/assets/images/projects/taskapp.jpg',
+        imageUrl: '/assets/images/projects/Task Management App.jpg',
         projectUrl: 'https://demo-taskapp.com',
         featured: true,
         technologies: ['React Native', 'Node.js', 'MongoDB', 'Socket.io']
@@ -499,7 +499,7 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
         title: 'Portfolio Website',
         description: 'Modern portfolio website with animations and content management system.',
         category: 'Web Development',
-        imageUrl: '/assets/images/projects/portfolio.jpg',
+        imageUrl: '/assets/images/projects/Portfolio Website.jpg',
         projectUrl: 'https://demo-portfolio.com',
         featured: false,
         technologies: ['Angular', 'Three.js', 'GSAP', 'SCSS']
