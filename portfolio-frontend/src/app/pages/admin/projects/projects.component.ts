@@ -12,7 +12,7 @@ import { AdminService } from '../../../services/admin.service';
       <div class="page-header">
         <div class="header-left">
           <h1>Projects Management</h1>
-          <p>Manage your portfolio projects</p>
+          <p>Manage your projects</p>
         </div>
         <button class="btn btn-primary" (click)="showAddForm()">
           <i class="fas fa-plus"></i>
