@@ -59,64 +59,7 @@ import { AuthService } from '../../services/auth.service';
       </div>
     </div>
   `,
-  styles: [`
-    .simple-contact-page {
-      min-height: 100vh;
-      background: var(--background-color);
-      padding: 4rem 1rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .container {
-      width: 100%;
-      max-width: 500px;
-    }
-    .contact-card {
-      background: var(--card-background);
-      padding: 2.5rem;
-      border-radius: 1rem;
-      box-shadow: 0 4px 6px -1px var(--shadow-color);
-      border: 1px solid var(--border-color);
-    }
-    .header {
-      text-align: center;
-      margin-bottom: 2rem;
-      h1 { color: var(--text-color); margin-bottom: 0.5rem; }
-      p { color: var(--secondary-text-color); }
-    }
-    .form-group {
-      margin-bottom: 1.5rem;
-      label { display: block; margin-bottom: 0.5rem; color: var(--text-color); font-weight: 500; }
-    }
-    .form-input, .form-textarea {
-      width: 100%;
-      padding: 0.75rem;
-      border: 1px solid var(--border-color);
-      border-radius: 0.5rem;
-      background-color: var(--background-color);
-      color: var(--text-color);
-      &:focus { outline: none; border-color: var(--primary-color); }
-    }
-    .btn {
-      width: 100%;
-      padding: 0.75rem;
-      border-radius: 0.5rem;
-      font-weight: 600;
-      cursor: pointer;
-      border: none;
-      &.btn-primary { background: var(--primary-color); color: white; &:hover { background: var(--primary-hover-color); } }
-      &.btn-outline { background: transparent; border: 1px solid var(--primary-color); color: var(--primary-color); margin-top: 1rem; }
-      &:disabled { opacity: 0.7; cursor: not-allowed; }
-    }
-    .success-message {
-      text-align: center;
-      padding: 2rem 0;
-      i { font-size: 3rem; color: #10b981; margin-bottom: 1rem; }
-      h3 { color: var(--text-color); margin-bottom: 0.5rem; }
-      p { color: var(--secondary-text-color); }
-    }
-  `]
+  styleUrls: ['./simple-contact.component.scss']
 })
 export class SimpleContactComponent {
   private contactService = inject(ContactService);
