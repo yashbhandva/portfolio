@@ -14,7 +14,7 @@ import { ProjectSummary } from '../../models/project.model';
     <section class="portfolio-hero">
       <div class="container">
         <div class="hero-content">
-          <h1 class="hero-title">Our Portfolio</h1>
+          <h1 class="hero-title">Our Projects </h1>
           <p class="hero-description">
             Explore our latest projects and see how we've helped businesses 
             transform their ideas into successful digital solutions.
