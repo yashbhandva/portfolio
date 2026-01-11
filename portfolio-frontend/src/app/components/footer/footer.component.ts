@@ -64,15 +64,15 @@ import { RouterLink } from '@angular/router';
           <div class="contact-info">
             <div class="contact-item">
               <i class="fas fa-map-marker-alt"></i>
-              <span>123 Business Street, City, State 12345</span>
+              <span>Moda(Kutch) Gujarat, India 370 155</span>
             </div>
             <div class="contact-item">
               <i class="fas fa-phone"></i>
-              <span>+1 (555) 123-4567</span>
+              <span>+91 95125 70683</span>
             </div>
             <div class="contact-item">
               <i class="fas fa-envelope"></i>
-              <span>hello&#64;portfolio.com</span>
+              <span>yashbhandva01&#64;gmail.com</span>
             </div>
           </div>
         </div>
@@ -83,8 +83,8 @@ import { RouterLink } from '@angular/router';
         <div class="footer-bottom-container">
           <p>&copy; 2024 Portfolio Website. All rights reserved.</p>
           <div class="footer-bottom-links">
-            <a href="#" class="footer-bottom-link">Privacy Policy</a>
-            <a href="#" class="footer-bottom-link">Terms of Service</a>
+            <a routerLink="/privacy-policy" class="footer-bottom-link">Privacy Policy</a>
+            <a routerLink="/terms-of-service" class="footer-bottom-link">Terms of Service</a>
           </div>
         </div>
       </div>
