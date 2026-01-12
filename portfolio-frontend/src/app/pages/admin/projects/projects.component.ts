@@ -8,12 +8,20 @@ import { AdminService } from '../../../services/admin.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
+  <!-- Hero Section -->
+          <section class="portfolio-hero">
+            <div class="container">
+              <div class="hero-content">
+                <h1 class="hero-title">Projects Management</h1>
+                <p class="hero-description">
+                 Manage your projects.
+                </p>
+              </div>
+            </div>
+          </section>
     <div class="admin-projects">
       <div class="page-header">
-        <div class="header-left">
-          <h1>Projects Management</h1>
-          <p>Manage your projects</p>
-        </div>
+
         <button class="btn btn-primary" (click)="showAddForm()">
           <i class="fas fa-plus"></i>
           Add New Project
