@@ -8,10 +8,21 @@ import { AuthService } from '../../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
+    <!-- Hero Section -->
+              <section class="portfolio-hero">
+                <div class="container">
+                  <div class="hero-content">
+                    <h1>My Profile Settings</h1>
+                    <p class="hero-description">
+                      View and manage your account information
+                    </p>
+                  </div>
+                </div>
+              </section>
+
     <div class="profile-container">
       <div class="page-header">
-        <h1 class="page-title">Profile Settings</h1>
-        <p class="page-subtitle">Manage your account information</p>
+
       </div>
 
       <div class="profile-content">
