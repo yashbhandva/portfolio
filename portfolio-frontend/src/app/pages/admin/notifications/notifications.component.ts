@@ -9,12 +9,20 @@ import { NotificationService } from '../../../services/notification.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
+  <!-- Hero Section -->
+          <section class="portfolio-hero">
+            <div class="container">
+              <div class="hero-content">
+                <h1 class="hero-title">Notifications</h1>
+                <p class="hero-description">
+                 Send updates and announcements to users.
+                </p>
+              </div>
+            </div>
+          </section>
     <div class="admin-notifications">
       <div class="page-header">
-        <div class="header-left">
-          <h1>Notifications</h1>
-          <p>Send updates and announcements to users</p>
-        </div>
+
       </div>
 
       <div class="content-grid">
