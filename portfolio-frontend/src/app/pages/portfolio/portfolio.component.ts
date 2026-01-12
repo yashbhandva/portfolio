@@ -440,7 +440,10 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
       },
       error: (error) => {
         console.error('Error loading projects:', error);
-        this.loadSampleProjects();
+        // Fallback to empty array instead of sample data if API fails
+        // This prevents showing stale/sample data when backend is reachable but returns error
+        this.allProjects.set([]);
+        this.filteredProjects.set([]);
       }
     });
   }
@@ -470,74 +473,6 @@ export class PortfolioComponent implements OnInit, AfterViewInit {
   private extractCategories(): void {
     const categories = [...new Set(this.allProjects().map(p => p.category))];
     this.categories.set(categories);
-  }
-
-  private loadSampleProjects(): void {
-    const sampleProjects: ProjectSummary[] = [
-      {
-        id: 1,
-        title: 'E-Commerce Platform',
-        description: 'Full-stack e-commerce solution with payment integration and admin dashboard.',
-        category: 'Web Development',
-        imageUrl: '/assets/images/projects/E-Commerce Platform.jpg',
-        projectUrl: 'https://demo-ecommerce.com',
-        featured: true,
-        technologies: ['Angular', 'Spring Boot', 'MySQL', 'Stripe', 'AWS']
-      },
-      {
-        id: 2,
-        title: 'Task Management App',
-        description: 'Productivity app for team collaboration and task tracking with real-time updates.',
-        category: 'Mobile Development',
-        imageUrl: '/assets/images/projects/Task Management App.jpg',
-        projectUrl: 'https://demo-taskapp.com',
-        featured: true,
-        technologies: ['React Native', 'Node.js', 'MongoDB', 'Socket.io']
-      },
-      {
-        id: 3,
-        title: 'Portfolio Website',
-        description: 'Modern portfolio website with animations and content management system.',
-        category: 'Web Development',
-        imageUrl: '/assets/images/projects/Portfolio Website.jpg',
-        projectUrl: 'https://demo-portfolio.com',
-        featured: false,
-        technologies: ['Angular', 'Three.js', 'GSAP', 'SCSS']
-      },
-      {
-        id: 4,
-        title: 'Social Media Dashboard',
-        description: 'Analytics dashboard for social media management and performance tracking.',
-        category: 'Web Development',
-        imageUrl: '/assets/images/projects/dashboard.jpg',
-        featured: false,
-        technologies: ['Vue.js', 'Express.js', 'PostgreSQL', 'Chart.js']
-      },
-      {
-        id: 5,
-        title: 'Fitness Tracking App',
-        description: 'Mobile app for workout tracking, progress monitoring, and fitness plans.',
-        category: 'Mobile Development',
-        imageUrl: '/assets/images/projects/fitness.jpg',
-        featured: true,
-        technologies: ['Flutter', 'Firebase', 'Google Fit API']
-      },
-      {
-        id: 6,
-        title: 'Restaurant Booking System',
-        description: 'Online reservation system for restaurants with table management.',
-        category: 'Web Development',
-        imageUrl: '/assets/images/projects/restaurant.jpg',
-        projectUrl: 'https://demo-restaurant.com',
-        featured: false,
-        technologies: ['React', 'Python', 'Django', 'SQLite']
-      }
-    ];
-
-    this.allProjects.set(sampleProjects);
-    this.filteredProjects.set(sampleProjects);
-    this.extractTechnologies();
-    this.extractCategories();
   }
 
   // Filtering methods
