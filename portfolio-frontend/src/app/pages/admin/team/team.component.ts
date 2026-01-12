@@ -6,6 +6,17 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
+  <!-- Hero Section -->
+          <section class="portfolio-hero">
+            <div class="container">
+              <div class="hero-content">
+                <h1 class="hero-title">Team Management</h1>
+                <p class="hero-description">
+                 Manage team members and their roles.
+                </p>
+              </div>
+            </div>
+          </section>
     <div class="team-container">
       <div class="page-header">
         <div class="header-content">
