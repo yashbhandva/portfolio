@@ -1,3 +1,37 @@
+
+// Hero Section
+.portfolio-hero {
+background: linear-gradient(135deg, #e0c3fc 0%, #5f0a87 100%);
+  color: white;
+  padding: 8rem 0 4rem;
+  text-align: center;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
+
+
 .auth-container {
   min-height: 100vh;
   display: flex;
@@ -84,7 +118,7 @@
   position: relative;
 
   .form-input {
-    padding-right: 3rem;
+    padding-right: 1rem;
   }
 
   .password-toggle {
@@ -105,9 +139,9 @@
 }
 
 .form-input {
-  width: 100%;
+  width: 95%;
   padding: 0.75rem 1rem;
-  border: 2px solid #e5e7eb;
+  border: 3px solid #e5e7eb;
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: all 0.3s ease;
