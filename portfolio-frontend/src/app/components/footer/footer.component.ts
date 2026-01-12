@@ -10,7 +10,7 @@ import { RouterLink } from '@angular/router';
       <div class="footer-container">
         <!-- Company Info -->
         <div class="footer-section">
-          <h3 class="footer-logo">Portfolio</h3>
+          <h3 class="footer-logo">yaorvi</h3>
           <p class="footer-description">
             We create amazing digital experiences and help businesses grow online. 
             Let's build something great together.
@@ -81,7 +81,7 @@ import { RouterLink } from '@angular/router';
       <!-- Bottom Bar -->
       <div class="footer-bottom">
         <div class="footer-bottom-container">
-          <p>&copy; 2026 yavi Website. All rights reserved.</p>
+          <p>&copy; 2026 yaorvi Website. All rights reserved.</p>
           <div class="footer-bottom-links">
             <a routerLink="/privacy-policy" class="footer-bottom-link">Privacy Policy</a>
             <a routerLink="/terms-of-service" class="footer-bottom-link">Terms of Service</a>
