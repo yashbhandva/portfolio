@@ -1,65 +1,178 @@
+// Variables
+$primary-color: #2563eb;
+$primary-dark: #1d4ed8;
+$text-color: #1f2937;
+$text-light: #6b7280;
+$bg-light: #f8fafc;
+$border-color: #e5e7eb;
+$white: #ffffff;
+$shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+$radius-md: 0.5rem;
+$radius-lg: 1rem;
+
 .messages-container {
-  min-height: 100vh;
-  background: var(--background-color);
   padding: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
 }
 
 .page-header {
   margin-bottom: 2rem;
 
   h1 {
-    color: var(--text-color);
+    font-size: 2rem;
+    font-weight: 700;
+    color: $text-color;
+    margin-bottom: 0.5rem;
   }
 
   p {
-    color: var(--secondary-text-color);
+    color: $text-light;
+    font-size: 1.1rem;
   }
+}
+
+.messages-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
 }
 
 .message-card {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 4px 6px var(--shadow-color);
-}
+  background: $white;
+  border-radius: $radius-lg;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-sm;
+  padding: 1.5rem;
+  transition: all 0.3s ease;
 
-.message-header {
-  border-bottom: 1px solid var(--border-color);
-  h3 {
-    color: var(--text-color);
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+    border-color: rgba($primary-color, 0.3);
   }
-  .date {
-    color: var(--secondary-text-color);
-  }
-}
 
-.message-body {
-  color: var(--secondary-text-color);
-}
+  .message-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 1rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid $border-color;
 
-.admin-reply {
-  background: rgba(59, 130, 246, 0.1);
-  border-left: 4px solid var(--primary-color);
+    @media (max-width: 640px) {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
 
-  .reply-header {
-    color: var(--primary-color);
-    .reply-date {
-      color: var(--secondary-text-color);
+    .subject-section {
+      h3 {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: $text-color;
+        margin-bottom: 0.5rem;
+      }
+
+      .status-badge {
+        display: inline-block;
+        font-size: 0.75rem;
+        font-weight: 600;
+        padding: 0.25rem 0.75rem;
+        border-radius: 2rem;
+        text-transform: uppercase;
+
+        &.PENDING { background: #fef3c7; color: #d97706; }
+        &.REPLIED { background: #dcfce7; color: #16a34a; }
+        &.CLOSED { background: #f3f4f6; color: #4b5563; }
+      }
+    }
+
+    .date {
+      font-size: 0.85rem;
+      color: $text-light;
+      white-space: nowrap;
     }
   }
 
-  p {
-    color: var(--text-color);
+  .message-body {
+    color: $text-color;
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+    font-size: 1rem;
+  }
+
+  .admin-reply {
+    background: #eff6ff;
+    border-radius: $radius-md;
+    padding: 1.25rem;
+    border-left: 4px solid $primary-color;
+    margin-top: 1rem;
+
+    .reply-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+
+      i {
+        color: $primary-color;
+      }
+
+      strong {
+        color: $primary-color;
+      }
+
+      .reply-date {
+        color: $text-light;
+        font-size: 0.8rem;
+        margin-left: auto;
+      }
+    }
+
+    p {
+      color: $text-color;
+      margin: 0;
+      line-height: 1.6;
+    }
   }
 }
 
 .empty-state {
-  background: var(--card-background);
-  border: 1px solid var(--border-color);
-  box-shadow: 0 4px 6px var(--shadow-color);
-  h3 {
-    color: var(--text-color);
+  text-align: center;
+  padding: 4rem 2rem;
+  background: $white;
+  border-radius: $radius-lg;
+  border: 1px dashed $border-color;
+
+  i {
+    font-size: 3rem;
+    color: #d1d5db;
+    margin-bottom: 1rem;
   }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: $text-color;
+    margin-bottom: 0.5rem;
+  }
+
   p {
-    color: var(--secondary-text-color);
+    color: $text-light;
+  }
+}
+
+.loading {
+  text-align: center;
+  padding: 4rem;
+  color: $text-light;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .messages-container {
+    padding: 1rem;
   }
 }
