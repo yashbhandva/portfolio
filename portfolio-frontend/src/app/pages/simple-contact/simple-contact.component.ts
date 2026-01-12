@@ -9,6 +9,19 @@ import { AuthService } from '../../services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   template: `
+   <!-- Hero Section -->
+      <section class="portfolio-hero">
+        <div class="container">
+          <div class="hero-content">
+            <h1 class="hero-title">Contact Us </h1>
+            <p class="hero-description">
+             Get in touch with us to discuss your ideas
+             and see how we can turn them into powerful digital solutions.
+            </p>
+          </div>
+        </div>
+      </section>
+
     <div class="simple-contact-page">
       <div class="container">
         <div class="contact-card">
