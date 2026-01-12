@@ -9,9 +9,19 @@ import { PaginationControlsComponent } from '../../../components/pagination-cont
   standalone: true,
   imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
+  <!-- Hero Section -->
+          <section class="portfolio-hero">
+            <div class="container">
+              <div class="hero-content">
+                <h1 class="hero-title">Services Management</h1>
+                <p class="hero-description">
+                 Manage and add new services.
+                </p>
+              </div>
+            </div>
+          </section>
     <div class="services-container">
       <div class="page-header">
-        <h1>Services Management</h1>
         <button class="btn btn-primary" (click)="showAddForm()">
           <i class="fas fa-plus"></i>
           Add New Service
