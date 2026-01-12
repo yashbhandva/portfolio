@@ -28,20 +28,7 @@ import { GsapService } from '../../services/gsap.service';
             </div>
           </div>
           
-          <div class="hero-stats">
-            <div class="stat-item">
-              <div class="stat-number" countUp="50">0</div>
-              <div class="stat-label">Projects Delivered</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number" countUp="98">0</div>
-              <div class="stat-label">Client Satisfaction</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number" countUp="5">0</div>
-              <div class="stat-label">Years Experience</div>
-            </div>
-          </div>
+
         </div>
       </div>
 
