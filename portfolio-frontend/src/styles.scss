@@ -1,15 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
 
 :root {
-  --background-color: #ffffff;
-  --text-color: #1f2937;
-  --secondary-text-color: #6b7280;
-  --primary-color: #2563eb;
-  --primary-hover-color: #1d4ed8;
+  --background-color: #e6f7ff; /* Medium light sky blue */
+  --text-color: #0f172a; /* Dark blue-gray */
+  --secondary-text-color: #475569;
+  --primary-color: #0ea5e9;
+  --primary-hover-color: #0284c7;
   --card-background: #ffffff;
-  --border-color: #e5e7eb;
+  --border-color: #7dd3fc; /* Medium sky blue border */
   --header-background: rgba(255, 255, 255, 0.95);
-  --shadow-color: rgba(0, 0, 0, 0.1);
+  --shadow-color: rgba(14, 165, 233, 0.15);
 }
 
 body {
