@@ -11,10 +11,20 @@ import { ClientService } from '../../../services/client.service';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
+   <!-- Hero Section -->
+          <section class="portfolio-hero">
+            <div class="container">
+              <div class="hero-content">
+                <h1>Welcome back, {{ currentUser()?.name || currentUser()?.firstName || 'User' }}!</h1>
+                <p class="hero-description">
+                 Explore our portfolio and services
+                </p>
+              </div>
+            </div>
+          </section>
     <div class="client-dashboard">
       <div class="dashboard-header">
-        <h1>Welcome back, {{ currentUser()?.name || currentUser()?.firstName || 'User' }}!</h1>
-        <p>Explore our portfolio and services</p>
+
       </div>
 
       <!-- Quick Stats -->
