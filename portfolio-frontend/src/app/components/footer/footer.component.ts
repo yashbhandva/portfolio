@@ -81,7 +81,7 @@ import { RouterLink } from '@angular/router';
       <!-- Bottom Bar -->
       <div class="footer-bottom">
         <div class="footer-bottom-container">
-          <p>&copy; 2024 Portfolio Website. All rights reserved.</p>
+          <p>&copy; 2026 yavi Website. All rights reserved.</p>
           <div class="footer-bottom-links">
             <a routerLink="/privacy-policy" class="footer-bottom-link">Privacy Policy</a>
             <a routerLink="/terms-of-service" class="footer-bottom-link">Terms of Service</a>
