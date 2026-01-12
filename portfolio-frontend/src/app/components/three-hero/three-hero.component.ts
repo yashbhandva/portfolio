@@ -1,6 +1,5 @@
-import { Component, OnDestroy, ElementRef, ViewChild, AfterViewInit, signal } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ThreeService } from '../../services/three.service';
 import { GsapService } from '../../services/gsap.service';
 
 @Component({
@@ -9,8 +8,6 @@ import { GsapService } from '../../services/gsap.service';
   imports: [CommonModule],
   template: `
     <section class="three-hero">
-      <div #threeContainer class="three-container"></div>
-      
       <div class="hero-content">
         <div class="container">
           <div class="hero-text">
@@ -27,10 +24,6 @@ import { GsapService } from '../../services/gsap.service';
               <button class="btn btn-primary" (click)="scrollToProjects()">
                 <i class="fas fa-rocket"></i>
                 View Our Work
-              </button>
-              <button class="btn btn-secondary" (click)="toggleAnimation()">
-                <i class="fas" [class.fa-play]="!animationRunning()" [class.fa-pause]="animationRunning()"></i>
-                {{ animationRunning() ? 'Pause' : 'Play' }} Animation
               </button>
             </div>
           </div>
@@ -63,29 +56,15 @@ import { GsapService } from '../../services/gsap.service';
   styleUrls: ['./three-hero.component.scss']
 })
 export class ThreeHeroComponent implements AfterViewInit, OnDestroy {
-  @ViewChild('threeContainer') threeContainer!: ElementRef;
 
-  animationRunning = signal(true);
-
-  constructor(
-    private threeService: ThreeService,
-    private gsapService: GsapService
-  ) {}
+  constructor(private gsapService: GsapService) {}
 
   ngAfterViewInit(): void {
-    this.initThreeJS();
     this.initAnimations();
   }
 
   ngOnDestroy(): void {
-    this.threeService.dispose();
     this.gsapService.destroy();
-  }
-
-  private initThreeJS(): void {
-    if (this.threeContainer) {
-      this.threeService.init(this.threeContainer.nativeElement);
-    }
   }
 
   private initAnimations(): void {
@@ -94,11 +73,6 @@ export class ThreeHeroComponent implements AfterViewInit, OnDestroy {
     setTimeout(() => {
       this.gsapService.initButtonAnimations();
     }, 1000);
-  }
-
-  toggleAnimation(): void {
-    this.threeService.toggleAnimation();
-    this.animationRunning.set(this.threeService.animationRunning());
   }
 
   scrollToProjects(): void {
