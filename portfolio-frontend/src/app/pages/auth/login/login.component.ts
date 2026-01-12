@@ -10,6 +10,20 @@ import { LoginRequest } from '../../../models/auth.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
+
+     <!-- Hero Section -->
+        <section class="portfolio-hero">
+          <div class="container">
+            <div class="hero-content">
+              <h1 class="hero-title">Contact Us </h1>
+              <p class="hero-description">
+               We’re glad to see you again! Log in to continue exploring our platform
+               where ideas meet technology and businesses grow with smart digital solutions.
+              </p>
+            </div>
+          </div>
+        </section>
+
     <div class="auth-container">
       <div class="auth-card">
         <div class="auth-header">
