@@ -5,7 +5,7 @@ import { AdminService } from '../../../services/admin.service';
 import { PaginationControlsComponent } from '../../../components/pagination-controls/pagination-controls.component';
 
 @Component({
-  selector: 'app-admin-contacts',
+  selector: 'app-admin-contacts.scss',
   standalone: true,
   imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
@@ -101,15 +101,18 @@ import { PaginationControlsComponent } from '../../../components/pagination-cont
                     <button class="btn-icon btn-view" (click)="viewContact(contact.id)" title="View">
                       <i class="fas fa-eye"></i>
                     </button>
-                    <button class="btn-icon btn-reply" (click)="replyContact(contact.id)" title="Reply">
+
+                    <button class="btn-icon btn-reply" (click)="replyContact(contact.id)" title="Reply"
+                            *ngIf="contact.status !== 'RESOLVED'">
                       <i class="fas fa-reply"></i>
                     </button>
-                    @if (contact.status === 'NEW' || contact.status === 'IN_PROGRESS') {
-                      <button class="btn-icon btn-resolve" (click)="markResolved(contact.id)" title="Mark Resolved">
-                        <i class="fas fa-check"></i>
-                      </button>
-                    }
+
+                    <button class="btn-icon btn-resolve" (click)="markResolved(contact.id)" title="Mark Resolved"
+                            *ngIf="contact.status === 'NEW' || contact.status === 'IN_PROGRESS'">
+                      <i class="fas fa-check"></i>
+                    </button>
                   </div>
+
                 </td>
               </tr>
             }
