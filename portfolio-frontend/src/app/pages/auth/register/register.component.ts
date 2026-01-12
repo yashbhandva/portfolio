@@ -10,6 +10,20 @@ import { RegisterRequest } from '../../../models/auth.model';
   standalone: true,
   imports: [CommonModule, FormsModule, RouterLink],
   template: `
+
+     <!-- Hero Section -->
+        <section class="portfolio-hero">
+          <div class="container">
+            <div class="hero-content">
+              <h1 class="hero-title">Contact Us </h1>
+              <p class="hero-description">
+               New here? Sign up and become part of a growing community that believes
+               in innovation, creativity, and building impactful digital solutions for the future.
+              </p>
+            </div>
+          </div>
+        </section>
+
     <div class="auth-container">
       <div class="auth-card">
         <div class="auth-header">
