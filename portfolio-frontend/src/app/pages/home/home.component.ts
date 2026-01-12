@@ -1,4 +1,4 @@
-import { Component, AfterViewInit } from '@angular/core';
+import { Component, AfterViewInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ThreeHeroComponent } from '../../components/three-hero/three-hero.component';
@@ -100,7 +100,7 @@ import { GsapService } from '../../services/gsap.service';
   `,
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements AfterViewInit {
+export class HomeComponent implements AfterViewInit, OnDestroy {
   featuredProjects = [
     {
       title: 'E-Commerce Platform',
@@ -135,7 +135,14 @@ export class HomeComponent implements AfterViewInit {
   constructor(private gsapService: GsapService) {}
 
   ngAfterViewInit(): void {
-    this.gsapService.initScrollAnimations();
+    // Use a timeout to ensure the DOM is fully rendered before initializing animations
+    setTimeout(() => {
+      this.gsapService.initScrollAnimations();
+    }, 100);
+  }
+
+  ngOnDestroy(): void {
+    this.gsapService.destroyScrollTriggers();
   }
 
   viewProject(project: any): void {
