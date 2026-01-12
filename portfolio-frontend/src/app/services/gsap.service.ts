@@ -10,6 +10,7 @@ gsap.registerPlugin(ScrollTrigger);
 })
 export class GsapService {
   private tl = gsap.timeline();
+  private scrollTriggers: ScrollTrigger[] = [];
 
   animateHeroSection(): void {
     this.tl.clear();
@@ -49,8 +50,14 @@ export class GsapService {
   }
 
   initScrollAnimations(): void {
+    // Kill old triggers before creating new ones
+    this.destroyScrollTriggers();
+
+    // Ensure DOM is ready
+    ScrollTrigger.refresh();
+
     gsap.utils.toArray('.service-card').forEach((card: any) => {
-      gsap.fromTo(card,
+      const trigger = gsap.fromTo(card,
         { y: 100, opacity: 0, rotationY: -15 },
         {
           y: 0,
@@ -60,17 +67,19 @@ export class GsapService {
           ease: 'power3.out',
           scrollTrigger: {
             trigger: card,
-            start: 'top 80%',
-            end: 'bottom 20%',
-            toggleActions: 'play none none reverse'
+            start: 'top 85%', // Adjusted start position
+            end: 'bottom 15%',
+            toggleActions: 'play none none reverse',
+            // markers: true // Uncomment for debugging
           }
         }
       );
+      if (trigger.scrollTrigger) this.scrollTriggers.push(trigger.scrollTrigger);
     });
 
     gsap.utils.toArray('.project-card').forEach((card: any, i) => {
-      gsap.fromTo(card,
-        { y: 100, opacity: 0, scale: 0.8 },
+      const trigger = gsap.fromTo(card,
+        { y: 100, opacity: 0, scale: 0.9 }, // Reduced scale effect
         {
           y: 0,
           opacity: 1,
@@ -85,10 +94,11 @@ export class GsapService {
           }
         }
       );
+      if (trigger.scrollTrigger) this.scrollTriggers.push(trigger.scrollTrigger);
     });
 
     gsap.utils.toArray('.section-title').forEach((title: any) => {
-      gsap.fromTo(title,
+      const trigger = gsap.fromTo(title,
         { y: 50, opacity: 0 },
         {
           y: 0,
@@ -102,7 +112,11 @@ export class GsapService {
           }
         }
       );
+      if (trigger.scrollTrigger) this.scrollTriggers.push(trigger.scrollTrigger);
     });
+
+    // Force a refresh after setting up triggers
+    setTimeout(() => ScrollTrigger.refresh(), 100);
   }
 
   initButtonAnimations(): void {
@@ -127,7 +141,22 @@ export class GsapService {
     });
   }
 
+  destroyScrollTriggers(): void {
+    // Kill all ScrollTriggers created by this service
+    this.scrollTriggers.forEach(trigger => trigger.kill());
+    this.scrollTriggers = [];
+
+    // Kill all GSAP tweens to prevent conflicts
+    gsap.killTweensOf('.service-card');
+    gsap.killTweensOf('.project-card');
+    gsap.killTweensOf('.section-title');
+
+    // Global kill for safety (optional, but good for cleanup)
+    ScrollTrigger.getAll().forEach(t => t.kill());
+  }
+
   destroy(): void {
     this.tl.kill();
+    this.destroyScrollTriggers();
   }
 }
