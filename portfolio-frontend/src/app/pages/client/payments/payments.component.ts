@@ -6,9 +6,19 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   template: `
+  <!-- Hero Section -->
+            <section class="portfolio-hero">
+              <div class="container">
+                <div class="hero-content">
+                  <h1>My Payments</h1>
+                  <p class="hero-description">
+                    View your payment history here
+                  </p>
+                </div>
+              </div>
+            </section>
     <div class="client-payments">
-      <h1>My Payments</h1>
-      <p>View your payment history here</p>
+
     </div>
   `,
   styleUrls: ['./payments.component.scss']
