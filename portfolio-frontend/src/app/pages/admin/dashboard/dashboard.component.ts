@@ -8,11 +8,21 @@ import { RouterLink } from '@angular/router';
   standalone: true,
   imports: [CommonModule, RouterLink],
   template: `
+
+     <!-- Hero Section -->
+        <section class="portfolio-hero">
+          <div class="container">
+            <div class="hero-content">
+              <h1 class="hero-title">Admin Dashboard</h1>
+              <p class="hero-description">
+               Manage, monitor, and lead — all from one powerful dashboard.
+              </p>
+            </div>
+          </div>
+        </section>
+
     <div class="admin-dashboard">
-      <div class="dashboard-header">
-        <h1>Admin Dashboard</h1>
-        <p>Manage your portfolio content and monitor activity</p>
-      </div>
+
 
       <!-- Stats Cards -->
       <div class="stats-grid">
