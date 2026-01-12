@@ -237,3 +237,37 @@
   gap: 1rem;
   margin-top: 1.5rem;
 }
+
+
+
+// Hero Section
+.portfolio-hero {
+background: linear-gradient(135deg, #e0c3fc 0%, #5f0a87 100%);
+  color: white;
+  padding: 8rem 0 4rem;
+  text-align: center;
+
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+
+    @media (max-width: 768px) {
+      font-size: 2.5rem;
+    }
+  }
+
+  .hero-description {
+    font-size: 1.25rem;
+    opacity: 0.9;
+    max-width: 800px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+}
