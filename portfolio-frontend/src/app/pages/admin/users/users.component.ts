@@ -9,12 +9,20 @@ import { PaginationControlsComponent } from '../../../components/pagination-cont
   standalone: true,
   imports: [CommonModule, FormsModule, PaginationControlsComponent],
   template: `
+  <!-- Hero Section -->
+          <section class="portfolio-hero">
+            <div class="container">
+              <div class="hero-content">
+                <h1 class="hero-title">User Management</h1>
+                <p class="hero-description">
+                 Manage client accounts and permissions.
+                </p>
+              </div>
+            </div>
+          </section>
     <div class="users-container">
       <div class="page-header">
-        <div class="header-content">
-          <h1 class="page-title">User Management</h1>
-          <p class="page-subtitle">Manage client accounts and permissions</p>
-        </div>
+
       </div>
 
       <div class="table-container">
