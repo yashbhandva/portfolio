@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, tap, map } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { ApiResponse } from '../models/api-response.model';
-import { ProjectSummary, ProjectResponse, ProjectRequest } from '../models/project.model';
+import { ProjectSummary, ProjectResponse, ProjectRequest, Project } from '../models/project.model';
 
 @Injectable({
   providedIn: 'root'
@@ -33,6 +33,10 @@ export class ProjectService {
             if (project.imageUrl && !project.imageUrl.startsWith('http')) {
               project.imageUrl = `${this.baseUrl}${project.imageUrl}`;
             }
+            // Ensure technologies is an array
+            if (typeof project.technologies === 'string') {
+              project.technologies = (project.technologies as string).split(',').map(t => t.trim());
+            }
           });
         }
         return response;
@@ -56,6 +60,10 @@ export class ProjectService {
             if (project.imageUrl && !project.imageUrl.startsWith('http')) {
               project.imageUrl = `${this.baseUrl}${project.imageUrl}`;
             }
+            // Ensure technologies is an array
+            if (typeof project.technologies === 'string') {
+              project.technologies = (project.technologies as string).split(',').map(t => t.trim());
+            }
           });
         }
         return response;
@@ -68,15 +76,30 @@ export class ProjectService {
     );
   }
 
-  getPublicProjectById(id: number): Observable<ApiResponse<ProjectSummary>> {
-    return this.http.get<ApiResponse<ProjectSummary>>(
+  getPublicProjectById(id: number): Observable<ApiResponse<Project>> {
+    return this.http.get<ApiResponse<any>>(
       `${this.apiUrl}/public/projects/${id}`
     ).pipe(
       map(response => {
-        if (response.status === 'success' && response.data.imageUrl && !response.data.imageUrl.startsWith('http')) {
-          response.data.imageUrl = `${this.baseUrl}${response.data.imageUrl}`;
+        if (response.status === 'success') {
+          const data = response.data;
+
+          // Fix Image URL
+          if (data.imageUrl && !data.imageUrl.startsWith('http')) {
+            data.imageUrl = `${this.baseUrl}${data.imageUrl}`;
+          }
+
+          // Fix Technologies (String to Array)
+          if (typeof data.technologies === 'string') {
+            data.technologies = data.technologies.split(',').map((t: string) => t.trim());
+          }
+
+          // Ensure fullDescription exists
+          if (!data.fullDescription) {
+            data.fullDescription = data.description;
+          }
         }
-        return response;
+        return response as ApiResponse<Project>;
       })
     );
   }
@@ -90,6 +113,9 @@ export class ProjectService {
           response.data.forEach(project => {
             if (project.imageUrl && !project.imageUrl.startsWith('http')) {
               project.imageUrl = `${this.baseUrl}${project.imageUrl}`;
+            }
+            if (typeof project.technologies === 'string') {
+              project.technologies = (project.technologies as string).split(',').map(t => t.trim());
             }
           });
         }
@@ -121,6 +147,9 @@ export class ProjectService {
             if (project.imageUrl && !project.imageUrl.startsWith('http')) {
               project.imageUrl = `${this.baseUrl}${project.imageUrl}`;
             }
+            if (typeof project.technologies === 'string') {
+              project.technologies = (project.technologies as string).split(',').map(t => t.trim());
+            }
           });
         }
         return response;
@@ -139,6 +168,9 @@ export class ProjectService {
             if (project.imageUrl && !project.imageUrl.startsWith('http')) {
               project.imageUrl = `${this.baseUrl}${project.imageUrl}`;
             }
+            if (typeof project.technologies === 'string') {
+              project.technologies = (project.technologies as string).split(',').map(t => t.trim());
+            }
           });
         }
         return response;
@@ -156,6 +188,9 @@ export class ProjectService {
           response.data.forEach(project => {
             if (project.imageUrl && !project.imageUrl.startsWith('http')) {
               project.imageUrl = `${this.baseUrl}${project.imageUrl}`;
+            }
+            if (typeof project.technologies === 'string') {
+              project.technologies = (project.technologies as string).split(',').map(t => t.trim());
             }
           });
         }
