@@ -15,7 +15,7 @@ import { LoginRequest } from '../../../models/auth.model';
         <section class="portfolio-hero">
           <div class="container">
             <div class="hero-content">
-              <h1 class="hero-title">Contact Us </h1>
+              <h1 class="hero-title">Login </h1>
               <p class="hero-description">
                We’re glad to see you again! Log in to continue exploring our platform
                where ideas meet technology and businesses grow with smart digital solutions.
