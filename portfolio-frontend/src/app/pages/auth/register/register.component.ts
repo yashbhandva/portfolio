@@ -15,7 +15,7 @@ import { RegisterRequest } from '../../../models/auth.model';
         <section class="portfolio-hero">
           <div class="container">
             <div class="hero-content">
-              <h1 class="hero-title">Contact Us </h1>
+              <h1 class="hero-title">Register here </h1>
               <p class="hero-description">
                New here? Sign up and become part of a growing community that believes
                in innovation, creativity, and building impactful digital solutions for the future.
